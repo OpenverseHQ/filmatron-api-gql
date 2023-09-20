@@ -1,0 +1,65 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ReturnMessageBase {
+  success: Boolean!
+  message: String!
+}
+
+type Query {
+  logOut: ReturnMessageBase!
+  refreshToken: ReturnTokenDto!
+  helloFilmMaker: String!
+  getFilmMaker(id: ID!): PersonEntity!
+}
+
+type ReturnTokenDto {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type PersonEntity {
+  id: ID!
+  publicKey: String
+  email: String
+  password: String
+  avatar: String
+  background: String
+  name: String!
+  bio: String
+  discord: String
+  youtube: String
+  twitter: String
+  instagram: String
+  refreshToken: String
+  role: Role!
+}
+
+enum Role {
+  ADMIN
+  USER
+  FILMMAKER
+}
+
+type Mutation {
+  signUp(input: CreateAccountDto!): ReturnAccountDto!
+  signIn(input: SignInDto!): ReturnAccountDto!
+}
+
+type ReturnAccountDto {
+  accessToken: String!
+  refreshToken: String!
+  person: PersonEntity!
+}
+
+input CreateAccountDto {
+  name: String!
+  email: String!
+  password: String!
+}
+
+input SignInDto {
+  email: String!
+  password: String!
+}
