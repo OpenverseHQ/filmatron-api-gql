@@ -24,6 +24,7 @@ async function bootstrap() {
         Logger.log(`##########################################################`, 'Bootstrap', false),
         Logger.warn(`🚀  Server http://${domain}:${port}/graphql`, 'Bootstrap', false),
         Logger.warn(`🚀  Server playground http://${domain}:${port}/graphql/playground`, 'Bootstrap', false),
+        Logger.warn(`🚀  Server restful http://${domain}:${port}/api/rest`, 'Bootstrap', false),
         Logger.log(`##########################################################`, 'Bootstrap', false))
       : Logger.log(`🚀  Server is listening on port ${port}`, 'Bootstrap', false)
   } catch (error) {

@@ -13,8 +13,10 @@ import { RoleModule } from './role/role.module'
 import { APP_INTERCEPTOR } from '@nestjs/core'
 import { join } from 'path'
 import { NFTModule } from './nft/nft.module'
+import { RestController } from './app.controller'
 
 @Module({
+  controllers: [RestController],
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
