@@ -32,13 +32,7 @@ export class SignInDto {
   @Field()
   @IsString()
   @IsNotEmpty()
-  @IsEmail()
-  email: string
-
-  @Field()
-  @IsString()
-  @IsNotEmpty()
-  password: string
+  publicKey: string
 }
 
 @ObjectType({ isAbstract: true })

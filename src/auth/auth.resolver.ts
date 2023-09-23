@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { AuthService } from './auth.service'
 import { CreateAccountDto, SignInDto, ReturnAccountDto, ReturnTokenDto } from './dtos/auth.dto'
 import { ReturnMessageBase } from 'src/common/interface/returnBase'
@@ -7,6 +7,14 @@ import { Person } from 'src/common/decorators/person.decorator'
 import { PersonEntity } from 'src/db/entities/person'
 import { UseGuards } from '@nestjs/common'
 import { RefreshTokenGuard } from 'src/guards/refreshToken.guard'
+
+interface MyContext {
+  req: {
+    headers: {
+      authorization: string
+    }
+  }
+}
 
 @Resolver()
 export class AuthResolver {
@@ -18,8 +26,9 @@ export class AuthResolver {
   }
 
   @Mutation(() => ReturnAccountDto, { name: 'signIn' })
-  async signIn(@Args('input') input: SignInDto) {
-    return await this.authService.signIn(input)
+  async signIn(@Args('input') input: SignInDto, @Context() context: MyContext) {
+    const authorization = context.req.headers.authorization
+    return await this.authService.signIn(input, authorization)
   }
 
   @Auth()

@@ -60,6 +60,5 @@ input CreateAccountDto {
 }
 
 input SignInDto {
-  email: String!
-  password: String!
+  publicKey: String!
 }
