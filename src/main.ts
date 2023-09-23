@@ -10,7 +10,8 @@ async function bootstrap() {
     const { domain, port } = config
 
     const app = await NestFactory.create(AppModule, {
-      logger: new APILogger()
+      logger: new APILogger(),
+      cors: true
     })
 
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }))

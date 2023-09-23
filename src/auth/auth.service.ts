@@ -10,6 +10,21 @@ import { PersonEntity } from 'src/db/entities/person'
 import { Message, MessageName } from 'src/common/message'
 import { config } from 'src/config'
 import { ReturnMessageBase } from 'src/common/interface/returnBase'
+import Web3Auth from '@web3auth/node-sdk'
+import { CHAIN_NAMESPACES } from '@web3auth/base'
+import { TokenPayload } from 'src/common/types'
+
+const web3AuthNetwork = 'testnet'
+const clientId = 'BOAVY7JsleeYdhThRhwt2w7iBgqrNzroFXSIVrKOtF8lyrzdgss-wuGgUPMcmQPuJ5M4ECgWaS4KHBR5d2xzTSU'
+const chainConfig = {
+  chainNamespace: CHAIN_NAMESPACES.SOLANA,
+  chainId: '0x3', // Please use 0x1 for Mainnet, 0x2 for Testnet, 0x3 for Devnet
+  rpcTarget: 'https://api.devnet.solana.com',
+  displayName: 'Solana Devnet',
+  blockExplorer: 'https://explorer.solana.com',
+  ticker: 'SOL',
+  tickerName: 'Solana Token'
+}
 
 @Injectable()
 export class AuthService {
@@ -47,26 +62,66 @@ export class AuthService {
     }
   }
 
-  async signIn({ email, password }: SignInDto): Promise<ReturnAccountDto> {
-    const person = await this.personRepository.findOne({ where: { email } })
+  async signIn({ publicKey }: SignInDto, authorization: string): Promise<ReturnAccountDto> {
+    const idToken = authorization.replace('Bearer ', '')
 
-    if (!person) {
-      throw new BadRequestException(Message.Base.NotFound(MessageName.user))
-    }
+    try {
+      const web3auth = new Web3Auth({
+        clientId,
+        chainConfig,
+        web3AuthNetwork
+      })
 
-    const passwordMatches = person.comparePassword(password)
-    if (!passwordMatches) {
-      throw new BadRequestException(Message.Base.NotFound(MessageName.user))
-    }
+      web3auth.init()
 
-    const tokens = await this.getTokens(person.id, person.email)
-    await this.updateRefreshToken(person.id, tokens.refreshToken)
+      const connect = async () => {
+        await web3auth
+          .connect({
+            verifier: 'ppp-custom-devnet',
+            verifierId: 'sub',
+            idToken
+          })
+          .then(() => {
+            console.log('Successfully connected to Web3Auth')
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
+      await connect()
 
-    delete person.password
+      const decodedToken: TokenPayload = this.jwtService.decode(idToken) as TokenPayload
 
-    return {
-      ...tokens,
-      person
+      if (!decodedToken) {
+        throw new ForbiddenException(Message.Base.AccessDenied())
+      }
+
+      if (decodedToken?.email) {
+        const person = await this.personRepository.findOne({ where: { email: decodedToken.email } })
+
+        if (!person) {
+          await this.personRepository.save({
+            email: decodedToken.email,
+            name: decodedToken.name,
+            role: 'USER'
+          })
+          return {
+            accessToken: idToken,
+            person,
+            refreshToken: ''
+          }
+        } else {
+          return {
+            accessToken: idToken,
+            person,
+            refreshToken: ''
+          }
+        }
+      }
+
+      throw new ForbiddenException(Message.Base.NotFound('Not found email'))
+    } catch (error) {
+      console.log(error)
     }
   }
 
