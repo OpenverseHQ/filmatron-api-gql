@@ -4,8 +4,12 @@
   "description": "",
   "author": "",
   "private": true,
+  "engines": {
+    "node": "18.18.0"
+  },
   "license": "UNLICENSED",
   "scripts": {
+    "preinstall": "npx only-allow yarn",
     "deploy:prod": "npm run check-start || npm run start-process",
     "check-start": "pm2 list | grep -q 'filmatron-server'",
     "start-process": "npm run build && pm2 start dist/main.js --name filmatron-server",
