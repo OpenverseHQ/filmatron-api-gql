@@ -47,5 +47,5 @@ jobs:
             git reset --hard origin/master
             git pull origin master
             rm -rf node_modules
-            yarn add --legacy-peer-deps
+            yarn install
             yarn run deploy:prod
