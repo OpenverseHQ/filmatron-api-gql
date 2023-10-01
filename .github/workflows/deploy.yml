@@ -42,9 +42,10 @@ jobs:
             nvm use 18.18.0 # Use the desired Node.js version
             echo "Node.js version after nvm use: $(node -v)"  # Display Node.js version after nvm use (for debugging)
             npm -v # Display npm version (for debugging)
+            yarn -v
             cd ~/filmatron/filmatron-server
             git reset --hard origin/master
             git pull origin master
             rm -rf node_modules
-            npm install --legacy-peer-deps
-            npm run deploy:prod
+            yarn add --legacy-peer-deps
+            yarn run deploy:prod
