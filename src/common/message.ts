@@ -7,10 +7,18 @@ export const Message = {
     Incorrect: (message: string) => `${message}_is_incorrect`,
     AccessDenied: () => `access_denied`
   },
-  User: {}
+  User: {
+    NOT_FOUND_PUBLICKEY: 'Not found publickey of current user'
+  },
+  Film: {
+    NFT_COLLECTION_NOT_CREATED: 'This collection of this film has not been created'
+  }
 }
 
 export const MessageName = {
-  user: 'user',
-  filmMaker: 'filmMaker'
+  user: 'User',
+  filmMaker: 'FilmMaker',
+  film: 'Film',
+  cNFT: 'CNFT',
+  collectionNFT: 'CollectionNFT'
 }

@@ -25,10 +25,22 @@ export class CreateAccountDto {
 }
 
 @InputType({ isAbstract: true })
-export class SignInDto {
+export class SignInWithSocialDto {
   @Field()
   @IsNotEmpty()
   publicKey: string
+}
+
+@InputType({ isAbstract: true })
+export class SignInDto {
+  @Field()
+  @IsNotEmpty()
+  @IsEmail()
+  email: string
+
+  @Field()
+  @IsNotEmpty()
+  password: string
 }
 
 @ObjectType({ isAbstract: true })

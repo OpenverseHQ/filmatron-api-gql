@@ -1,0 +1,53 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.18.0
+
+      - name: Run Deployment script
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          # Create SSH directory and add private key
+          mkdir -p ~/.ssh
+          echo "SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY"  # Add this line for debugging
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          # Add the VPS host key to known_hosts
+          ssh-keyscan -H 45.77.182.167 >> ~/.ssh/known_hosts
+          # SSH into the server and run deployment commands
+          ssh -i ~/.ssh/id_rsa root@45.77.182.167 'bash -s' <<EOF
+            source ~/.nvm/nvm.sh  # Source nvm.sh to load nvm
+            echo "nvm version: $(nvm --version)"
+            echo "Node.js version before nvm install: $(node -v)"  # Display Node.js version before nvm install (for debugging)
+            nvm install 18.18.0 # Install the desired Node.js version
+            echo "Node.js version after nvm install: $(node -v)"  # Display Node.js version after nvm install (for debugging)
+            nvm use 18.18.0 # Use the desired Node.js version
+            echo "Node.js version after nvm use: $(node -v)"  # Display Node.js version after nvm use (for debugging)
+            npm -v # Display npm version (for debugging)
+            yarn -v
+            cd ~/filmatron/filmatron-server
+            git reset --hard origin/master
+            git pull origin master
+            rm -rf node_modules
+            yarn install
+            yarn remove bcrypt
+            yarn add bcrypt
+            yarn run deploy:prod

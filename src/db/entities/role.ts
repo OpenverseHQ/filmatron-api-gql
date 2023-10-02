@@ -14,6 +14,6 @@ export class RoleEntity {
   @Column()
   role: ROLE
 
-  @OneToMany(() => PersonEntity, (person) => person.rolePerson)
+  @OneToMany(() => PersonEntity, person => person.rolePerson)
   persons: PersonEntity[]
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { PersonEntity } from 'src/db/entities/person'
+import { GetFilmMakerCommand } from './commands/getFilmMaker.commands'
 
 @Injectable()
 export class FilmMakerService {
@@ -10,7 +11,7 @@ export class FilmMakerService {
     private personRepository: Repository<PersonEntity>
   ) {}
 
-  async findOne(id: number): Promise<PersonEntity> {
-    return await this.personRepository.findOneOrFail({ where: { id } })
+  async getById(id: number): Promise<PersonEntity> {
+    return await GetFilmMakerCommand.getById(id)
   }
 }

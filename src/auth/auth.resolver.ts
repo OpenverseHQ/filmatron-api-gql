@@ -1,11 +1,11 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { UseGuards } from '@nestjs/common'
 import { AuthService } from './auth.service'
-import { CreateAccountDto, SignInDto, ReturnAccountDto, ReturnTokenDto } from './dtos/auth.dto'
+import { CreateAccountDto, SignInWithSocialDto, ReturnAccountDto, ReturnTokenDto, SignInDto } from './dtos/auth.dto'
 import { ReturnMessageBase } from 'src/common/interface/returnBase'
 import { Auth } from 'src/common/decorators/auth.decorator'
 import { Person } from 'src/common/decorators/person.decorator'
 import { PersonEntity } from 'src/db/entities/person'
-import { UseGuards } from '@nestjs/common'
 import { RefreshTokenGuard } from 'src/guards/refreshToken.guard'
 
 interface MyContext {
@@ -26,9 +26,14 @@ export class AuthResolver {
   }
 
   @Mutation(() => ReturnAccountDto, { name: 'signIn' })
-  async signIn(@Args('input') input: SignInDto, @Context() context: MyContext) {
+  async signIn(@Args('input') input: SignInDto) {
+    return await this.authService.signIn(input)
+  }
+
+  @Mutation(() => ReturnAccountDto, { name: 'signInWithSocial' })
+  async signInWithSocial(@Args('input') input: SignInWithSocialDto, @Context() context: MyContext) {
     const authorization = context.req.headers.authorization
-    return await this.authService.signIn(input, authorization)
+    return await this.authService.signInWithSocial(input, authorization)
   }
 
   @Auth()

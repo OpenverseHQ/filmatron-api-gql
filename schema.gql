@@ -8,10 +8,99 @@ type ReturnMessageBase {
 }
 
 type Query {
+  getFilmCollectionNFTById(id: ID!): PublicInformationFilmCollectionNFT!
+  getCompressedNFTsOfFilm(filmId: ID!, first: Int, after: String, last: Int, before: String): PaginatedCompressedNFT!
+  getCompressedNFT(id: ID!): FilmCompressedNFTEntity!
+  getFilmById(id: ID!): FilmInformationPublic!
+  getFilms(first: Int, after: String, last: Int, before: String): PaginatedFilm!
   logOut: ReturnMessageBase!
   refreshToken: ReturnTokenDto!
   helloFilmMaker: String!
-  getFilmMaker(id: ID!): PersonEntity!
+  getFilmMakerById(id: ID!): PersonEntity!
+}
+
+type PublicInformationFilmCollectionNFT {
+  id: ID!
+  name: String!
+  symbol: String!
+  uri: String!
+}
+
+type PaginatedCompressedNFT {
+  edges: [FilmCompressedNFTEntityEdge!]
+  pageInfo: PageInfo
+}
+
+type FilmCompressedNFTEntityEdge {
+  cursor: String!
+  node: FilmCompressedNFTEntity!
+}
+
+type FilmCompressedNFTEntity {
+  id: ID!
+  name: String!
+  symbol: String!
+  uri: String!
+  filmId: Float!
+}
+
+type PageInfo {
+  startCursor: String
+  endCursor: String
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+}
+
+type FilmInformationPublic {
+  id: ID!
+  name: String!
+  description: String!
+  duration: Int!
+  releaseDate: String!
+  genres: [FilmGenre!]!
+  stars: [String!]!
+  directors: [String!]!
+  adminProcess: AdminProcessStatus!
+  status: FilmStatus!
+  topCasts: [FilmTopCast!]
+  endDateSubscriber: DateTime!
+}
+
+enum FilmGenre {
+  DRAMA
+  ADVENTURE
+  COMEDY
+}
+
+enum AdminProcessStatus {
+  APPROVED
+  REJECTED
+  PENDING
+}
+
+enum FilmStatus {
+  COMING_SOON
+  ON_GOING
+}
+
+type FilmTopCast {
+  name: String!
+  avatar: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type PaginatedFilm {
+  edges: [FilmInformationPublicEdge!]
+  pageInfo: PageInfo
+}
+
+type FilmInformationPublicEdge {
+  cursor: String!
+  node: FilmInformationPublic!
 }
 
 type ReturnTokenDto {
@@ -43,8 +132,57 @@ enum Role {
 }
 
 type Mutation {
+  createCollection(input: CreateCollectionNFTDto!): ReturnMessageBase!
+  createCompressedNFTMetadata(input: CreateCompressedNFTMetadata!): ReturnMessageBase!
+  updateInformation(input: UpdateInformationDto!): ReturnMessageBase!
+  mintCompressedNFT(cNFTId: ID!): ReturnMessageBase!
+  createFilm(input: CreateFilmDto!): ReturnMessageBase!
   signUp(input: CreateAccountDto!): ReturnAccountDto!
   signIn(input: SignInDto!): ReturnAccountDto!
+  signInWithSocial(input: SignInWithSocialDto!): ReturnAccountDto!
+}
+
+input CreateCollectionNFTDto {
+  filmId: Float!
+  metadata: CollectionMetadataDto!
+}
+
+input CollectionMetadataDto {
+  name: String!
+  symbol: String!
+  uri: String!
+}
+
+input CreateCompressedNFTMetadata {
+  filmId: ID!
+  name: String!
+  symbol: String!
+  uri: String!
+}
+
+input UpdateInformationDto {
+  publicKey: String
+  avatar: String
+  background: String
+  name: String
+  bio: String
+}
+
+input CreateFilmDto {
+  name: String!
+  description: String!
+  duration: Int!
+  releaseDate: String!
+  genres: [FilmGenre!]! = []
+  stars: [String!]! = []
+  directors: [String!]! = []
+  topCasts: [FilmTopCastInput!]! = []
+  endDateSubscriber: DateTime!
+}
+
+input FilmTopCastInput {
+  name: String!
+  avatar: String!
 }
 
 type ReturnAccountDto {
@@ -61,5 +199,10 @@ input CreateAccountDto {
 }
 
 input SignInDto {
+  email: String!
+  password: String!
+}
+
+input SignInWithSocialDto {
   publicKey: String!
 }

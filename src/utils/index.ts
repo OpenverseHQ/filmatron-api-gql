@@ -1,4 +1,5 @@
 import { Connection } from '@solana/web3.js'
+import * as bs58 from 'bs58'
 import { APP_ENV } from 'src/common/constant'
 import { config } from 'src/config'
 
@@ -63,4 +64,8 @@ export const extractSignatureFromFailedTransaction = async (params: {
 
   // always return the failed signature value
   return failedSig
+}
+
+export const convertStringToUnitArray = (str: string): Uint8Array => {
+  return bs58.decode(str)
 }

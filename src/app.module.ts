@@ -14,10 +14,12 @@ import { APP_INTERCEPTOR } from '@nestjs/core'
 import { join } from 'path'
 import { NFTModule } from './nft/nft.module'
 import { AdminModule } from './admin/admin.module'
-import { RestController } from './app.controller'
+import { FilmModule } from './film/film.module'
+import { UserModule } from './user/user.module'
+import { JwtModule } from '@nestjs/jwt'
+import { FilmCollectionNFTModule } from './film-collection-nft/film-collection-nft.module'
 
 @Module({
-  controllers: [RestController],
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -38,7 +40,7 @@ import { RestController } from './app.controller'
 
         return errorFormatted
       },
-      include: [FilmMakerModule, AuthModule]
+      include: [FilmMakerModule, AuthModule, FilmModule, UserModule, NFTModule, FilmCollectionNFTModule, PersonModule]
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -50,6 +52,10 @@ import { RestController } from './app.controller'
     RoleModule,
     NFTModule,
     AdminModule,
+    FilmModule,
+    UserModule,
+    FilmCollectionNFTModule,
+    JwtModule.register({ global: true }),
     TypeOrmModule.forRoot(configData)
   ],
   providers: [

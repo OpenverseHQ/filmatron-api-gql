@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable, ForbiddenException, UnauthorizedException } from '@nestjs/common'
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
-import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
-import { CreateAccountDto, ReturnAccountDto, ReturnTokenDto, SignInDto } from './dtos/auth.dto'
+import * as bcrypt from 'bcrypt'
+import { CreateAccountDto, ReturnAccountDto, ReturnTokenDto, SignInDto, SignInWithSocialDto } from './dtos/auth.dto'
 import { PersonEntity } from 'src/db/entities/person'
 import { Message, MessageName } from 'src/common/message'
 import { config } from 'src/config'
@@ -51,7 +51,30 @@ export class AuthService {
     }
   }
 
-  async signIn({ publicKey }: SignInDto, authorization: string): Promise<ReturnAccountDto> {
+  async signIn({ email, password }: SignInDto): Promise<ReturnAccountDto> {
+    const person = await this.personRepository.findOne({ where: { email } })
+
+    if (!person) {
+      throw new BadRequestException(Message.Base.NotFound(MessageName.user))
+    }
+
+    const passwordMatches = person.comparePassword(password)
+    if (!passwordMatches) {
+      throw new BadRequestException(Message.Base.NotFound(MessageName.user))
+    }
+
+    const tokens = await this.getTokens(person.id, person.email)
+    await this.updateRefreshToken(person.id, tokens.refreshToken)
+
+    delete person.password
+
+    return {
+      ...tokens,
+      person
+    }
+  }
+
+  async signInWithSocial({ publicKey }: SignInWithSocialDto, authorization: string): Promise<ReturnAccountDto> {
     const idToken = authorization.replace('Bearer ', '')
 
     try {
@@ -147,7 +170,7 @@ export class AuthService {
         },
         {
           secret: config.secrets.accessToken,
-          expiresIn: '15m'
+          expiresIn: '30m'
         }
       ),
       this.jwtService.signAsync(

@@ -7,8 +7,20 @@ import {
 import { Connection, Keypair, PublicKey, Transaction, sendAndConfirmTransaction } from '@solana/web3.js'
 import { PROGRAM_ID as BUBBLEGUM_PROGRAM_ID, createCreateTreeInstruction } from '@metaplex-foundation/mpl-bubblegum'
 import { explorerURL, extractSignatureFromFailedTransaction } from '@/utils'
+import {
+  CreateMetadataAccountArgsV3,
+  createCreateMasterEditionV3Instruction,
+  createCreateMetadataAccountV3Instruction,
+  createSetCollectionSizeInstruction
+} from '@metaplex-foundation/mpl-token-metadata'
+import { createAccount, createMint, mintTo, TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import { PROGRAM_ID as TOKEN_METADATA_PROGRAM_ID } from '@metaplex-foundation/mpl-token-metadata'
 
 export class CreateTreeCommand {
+  /*
+  Helper function to create a merkle tree on chain, including allocating 
+  all the space required to store all the nodes
+  */
   static async createTree(params: {
     canopyDepth: number
     connection: Connection
@@ -75,12 +87,12 @@ export class CreateTreeCommand {
 
       return { treeAuthority, treeAddress: treeKeypair.publicKey }
     } catch (error: any) {
-      console.error("\nFailed to create merkle tree:", error);
+      console.error('\nFailed to create merkle tree:', error)
 
       // log a block explorer link for the failed transaction
-      await extractSignatureFromFailedTransaction({ connection, err: error });
-  
-      throw error;
+      await extractSignatureFromFailedTransaction({ connection, err: error })
+
+      throw error
     }
   }
 }

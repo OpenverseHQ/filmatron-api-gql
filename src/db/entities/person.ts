@@ -6,8 +6,6 @@ import {
   UpdateDateColumn,
   Column,
   Entity,
-  OneToOne,
-  JoinColumn,
   OneToMany,
   ManyToOne
 } from 'typeorm'
@@ -87,7 +85,7 @@ export class PersonEntity {
   @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt: Date
 
-  @ManyToOne(() => RoleEntity, (role) => role.persons)
+  @ManyToOne(() => RoleEntity, role => role.persons)
   rolePerson: RoleEntity
 
   @OneToMany(() => FilmEntity, film => film.person, { nullable: true })
