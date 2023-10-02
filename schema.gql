@@ -43,7 +43,7 @@ enum Role {
 }
 
 type Mutation {
-  signup(input: CreateAccountDto!): ReturnAccountDto!
+  signUp(input: CreateAccountDto!): ReturnAccountDto!
   signIn(input: SignInDto!): ReturnAccountDto!
 }
 
