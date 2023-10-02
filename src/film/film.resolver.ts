@@ -1,6 +1,6 @@
 import { Resolver, Query, ID, Args, Mutation } from '@nestjs/graphql'
 import { FilmService } from './film.service'
-import { CreateFilmDto, FilmInformationPublic, PaginatedFilm } from './dtos'
+import { CreateFilmDto, FilmInformationPublic, PaginatedFilm, PaginatedFilmGallery, UpsertGalleryFilmDto } from './dtos'
 import { PaginationArgs } from '@/common/interface'
 import { AuthKylan } from 'src/common/decorators/auth.decorator'
 import { ROLE } from '@/common/constant'
@@ -18,13 +18,32 @@ export class FilmResolver {
   }
 
   @Query(() => PaginatedFilm, { name: 'getFilms' })
-  async getFilms(@Args() pagination: PaginationArgs): Promise<PaginatedFilm> {
-    return this.filmService.getFilms(pagination)
+  async getFilms(@Args() paginationArgs: PaginationArgs): Promise<PaginatedFilm> {
+    return this.filmService.getFilms(paginationArgs)
+  }
+
+  @AuthKylan([ROLE.FILMMAKER, ROLE.USER])
+  @Query(() => PaginatedFilmGallery, { name: 'getGalleryOfFilm' })
+  async getGalleryOfFilm(
+    @Args('filmId', { type: () => ID }) filmId: number,
+    @Args() paginationArgs: PaginationArgs,
+    @Person() person: PersonEntity
+  ): Promise<PaginatedFilmGallery> {
+    return await this.filmService.getGalleryOfFilm({ filmId, paginationArgs, person })
   }
 
   @AuthKylan([ROLE.FILMMAKER])
   @Mutation(() => ReturnMessageBase, { name: 'createFilm' })
   async createFilm(@Args('input') input: CreateFilmDto, @Person() person: PersonEntity): Promise<ReturnMessageBase> {
     return await this.filmService.createFilm(input, person)
+  }
+
+  @AuthKylan([ROLE.FILMMAKER])
+  @Mutation(() => ReturnMessageBase, { name: 'upsertGalleryFilm' })
+  async upsertGalleryFilm(
+    @Args('input') input: UpsertGalleryFilmDto,
+    @Person() person: PersonEntity
+  ): Promise<ReturnMessageBase> {
+    return await this.filmService.upsertGalleryFilm(input, person)
   }
 }

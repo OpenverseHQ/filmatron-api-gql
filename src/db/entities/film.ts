@@ -3,7 +3,7 @@ import { Field, GraphQLISODateTime, ID, Int, ObjectType } from '@nestjs/graphql'
 import { FILM_GENRE, ADMIN_PROCESS_STATUS, FILM_STATUS } from 'src/common/constant'
 import { FilmTopCast } from 'src/common/types'
 import { PersonEntity } from './person'
-import { FilmEventEntity } from './filmEvent'
+import { FilmGalleryEntity } from './filmGalery'
 import { Expose } from 'class-transformer'
 import { FilmCompressedNFTEntity } from './filmCompressedNFT'
 
@@ -65,10 +65,6 @@ export class FilmEntity {
   @Expose()
   topCasts: FilmTopCast[]
 
-  @Field(() => [String], { nullable: true })
-  @Column({ type: 'varchar', array: true, nullable: true })
-  gallery?: string[] | null
-
   @Field(() => GraphQLISODateTime)
   @Column()
   @Expose()
@@ -81,8 +77,8 @@ export class FilmEntity {
   @ManyToOne(() => PersonEntity, person => person.films)
   person: PersonEntity
 
-  @OneToMany(() => FilmEventEntity, event => event.film)
-  events: FilmEventEntity[]
+  @OneToMany(() => FilmGalleryEntity, event => event.film)
+  galleries: FilmGalleryEntity[]
 
   @OneToMany(() => FilmCompressedNFTEntity, compressedNFT => compressedNFT.film)
   compressedNFTs: FilmCompressedNFTEntity[]

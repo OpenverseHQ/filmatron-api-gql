@@ -1,5 +1,6 @@
 import { Connection } from '@solana/web3.js'
 import * as bs58 from 'bs58'
+import { isNil } from 'lodash'
 import { APP_ENV } from 'src/common/constant'
 import { config } from 'src/config'
 
@@ -68,4 +69,14 @@ export const extractSignatureFromFailedTransaction = async (params: {
 
 export const convertStringToUnitArray = (str: string): Uint8Array => {
   return bs58.decode(str)
+}
+
+export const compactObject = <T extends Record<string, any>>(object: T | undefined): T => {
+  if (!object) return null
+
+  return Object.entries(object).reduce((acc: Record<string, any>, [key, value]: [key: string, value: string]) => {
+    if (!isNil(value)) acc[key] = value
+
+    return acc
+  }, {}) as T
 }
