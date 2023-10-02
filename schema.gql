@@ -13,7 +13,8 @@ type Query {
   getCompressedNFT(id: ID!): FilmCompressedNFTEntity!
   getFilmById(id: ID!): FilmInformationPublic!
   getFilms(first: Int, after: String, last: Int, before: String): PaginatedFilm!
-  getGalleryOfFilm(filmId: ID!, first: Int, after: String, last: Int, before: String): PaginatedFilmGallery!
+  getGalleriesOfFilm(filmId: ID!, first: Int, after: String, last: Int, before: String): PaginatedFilmGallery!
+  getGalleryById(id: ID!): FilmGalleryEntity!
   logOut: ReturnMessageBase!
   refreshToken: ReturnTokenDto!
   helloFilmMaker: String!
