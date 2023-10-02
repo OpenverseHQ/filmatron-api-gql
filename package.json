@@ -10,9 +10,9 @@
   "license": "UNLICENSED",
   "scripts": {
     "preinstall": "npx only-allow yarn",
-    "deploy:prod": "yarn run build && yarn run check-start || yarn run start-process",
+    "deploy:prod": "yarn run build && yarn run check-start && yarn run start-process",
     "check-start": "pm2 list | grep -q 'filmatron-server'",
-    "start-process": "yarn run build && pm2 start dist/main.js --name filmatron-server",
+    "start-process": "yarn run build && pm2 delete filmatron-server && pm2 start dist/main.js --name filmatron-server",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
