@@ -7,6 +7,7 @@ import { ROLE } from '@/common/constant'
 import { ReturnMessageBase } from '@/common/interface/returnBase'
 import { Person } from '@/common/decorators/person.decorator'
 import { PersonEntity } from '@/db/entities/person'
+import { FilmGalleryEntity } from '@/db/entities/filmGalery'
 
 @Resolver()
 export class FilmResolver {
@@ -23,13 +24,19 @@ export class FilmResolver {
   }
 
   @AuthKylan([ROLE.FILMMAKER, ROLE.USER])
-  @Query(() => PaginatedFilmGallery, { name: 'getGalleryOfFilm' })
-  async getGalleryOfFilm(
+  @Query(() => PaginatedFilmGallery, { name: 'getGalleriesOfFilm' })
+  async getGalleriesOfFilm(
     @Args('filmId', { type: () => ID }) filmId: number,
     @Args() paginationArgs: PaginationArgs,
     @Person() person: PersonEntity
   ): Promise<PaginatedFilmGallery> {
-    return await this.filmService.getGalleryOfFilm({ filmId, paginationArgs, person })
+    return await this.filmService.getGalleriesOfFilm({ filmId, paginationArgs, person })
+  }
+
+  @AuthKylan([ROLE.FILMMAKER, ROLE.USER])
+  @Query(() => FilmGalleryEntity, { name: 'getGalleryById' })
+  async getGalleryById(@Args('id', { type: () => ID }) id: number, @Person() person: PersonEntity): Promise<FilmGalleryEntity> {
+    return await this.filmService.getGalleryById(id, person)
   }
 
   @AuthKylan([ROLE.FILMMAKER])

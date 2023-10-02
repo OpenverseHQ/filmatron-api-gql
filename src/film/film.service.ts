@@ -12,6 +12,7 @@ import { ReturnMessageBase } from '@/common/interface/returnBase'
 import { ADMIN_PROCESS_STATUS, FILM_STATUS } from '@/common/constant'
 import { FilmGalleryEntity } from '@/db/entities/filmGalery'
 import { compactObject } from '@/utils'
+import { GetFilmGalleryCommand } from './commands/GetFilmGallery.command'
 
 @Injectable()
 export class FilmService {
@@ -34,7 +35,7 @@ export class FilmService {
     return paginate({ query, paginationArgs, isUsedPlainClass: true, classRef: FilmEntity, defaultLimit: 7 })
   }
 
-  async getGalleryOfFilm(params: {filmId: number, paginationArgs: PaginationArgs, person: PersonEntity}): Promise<PaginatedFilmGallery> {
+  async getGalleriesOfFilm(params: {filmId: number, paginationArgs: PaginationArgs, person: PersonEntity}): Promise<PaginatedFilmGallery> {
     const { filmId, paginationArgs, person } = params
     // validate the current user have the permission to see via nft or not 
     
@@ -46,6 +47,12 @@ export class FilmService {
       .where('FilmGalleryEntity.filmId = :filmId', { filmId })
 
     return paginate<FilmGalleryEntity>({ query, paginationArgs, defaultLimit: 10 })
+  }
+
+  async getGalleryById(id: number, person: PersonEntity): Promise<FilmGalleryEntity> {
+    // validate the current user have the permission to see via nft or not 
+
+    return await GetFilmGalleryCommand.getById(id)
   }
 
   async createFilm(input: CreateFilmDto, person: PersonEntity): Promise<ReturnMessageBase> {
