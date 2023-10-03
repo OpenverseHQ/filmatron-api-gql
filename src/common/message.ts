@@ -8,7 +8,8 @@ export const Message = {
     AccessDenied: () => `access_denied`
   },
   User: {
-    NOT_FOUND_PUBLICKEY: 'Not found publickey of current user'
+    NOT_FOUND_PUBLICKEY: 'Not found publickey of current user',
+    CAN_NOT_SUBSCRIBE_TO_WHITELIST: 'Can not subscribe to whitelist'
   },
   Film: {
     NFT_COLLECTION_NOT_CREATED: 'This collection of this film has not been created'

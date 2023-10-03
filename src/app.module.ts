@@ -18,6 +18,7 @@ import { FilmModule } from './film/film.module'
 import { UserModule } from './user/user.module'
 import { JwtModule } from '@nestjs/jwt'
 import { FilmCollectionNFTModule } from './film-collection-nft/film-collection-nft.module'
+import { WhitelistModule } from './whitelist/whitelist.module'
 
 @Module({
   imports: [
@@ -40,7 +41,7 @@ import { FilmCollectionNFTModule } from './film-collection-nft/film-collection-n
 
         return errorFormatted
       },
-      include: [FilmMakerModule, AuthModule, FilmModule, UserModule, NFTModule, FilmCollectionNFTModule, PersonModule]
+      include: [FilmMakerModule, AuthModule, FilmModule, UserModule, NFTModule, FilmCollectionNFTModule, PersonModule, WhitelistModule]
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -55,6 +56,7 @@ import { FilmCollectionNFTModule } from './film-collection-nft/film-collection-n
     FilmModule,
     UserModule,
     FilmCollectionNFTModule,
+    WhitelistModule,
     JwtModule.register({ global: true }),
     TypeOrmModule.forRoot(configData)
   ],

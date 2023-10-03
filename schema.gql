@@ -8,10 +8,11 @@ type ReturnMessageBase {
 }
 
 type Query {
+  getWhitelistOfFilm(filmId: ID!): [WhitelistEntity!]!
   getFilmCollectionNFTById(id: ID!): PublicInformationFilmCollectionNFT!
   getCompressedNFTsOfFilm(filmId: ID!, first: Int, after: String, last: Int, before: String): PaginatedCompressedNFT!
   getCompressedNFT(id: ID!): FilmCompressedNFTEntity!
-  getFilmById(id: ID!): FilmInformationPublic!
+  getFilmById(id: ID!): FilmEntity!
   getFilms(first: Int, after: String, last: Int, before: String): PaginatedFilm!
   getGalleriesOfFilm(filmId: ID!, first: Int, after: String, last: Int, before: String): PaginatedFilmGallery!
   getGalleryById(id: ID!): FilmGalleryEntity!
@@ -19,6 +20,23 @@ type Query {
   refreshToken: ReturnTokenDto!
   helloFilmMaker: String!
   getFilmMakerById(id: ID!): PersonEntity!
+}
+
+type WhitelistEntity {
+  id: ID!
+  personId: Float!
+  filmId: Float!
+  person: PublicInformationPerson!
+}
+
+type PublicInformationPerson {
+  id: ID!
+  publicKey: String
+  email: String
+  avatar: String
+  background: String
+  name: String!
+  bio: String
 }
 
 type PublicInformationFilmCollectionNFT {
@@ -53,7 +71,7 @@ type PageInfo {
   hasNextPage: Boolean!
 }
 
-type FilmInformationPublic {
+type FilmEntity {
   id: ID!
   name: String!
   description: String!
@@ -96,13 +114,13 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type PaginatedFilm {
-  edges: [FilmInformationPublicEdge!]
+  edges: [FilmEntityEdge!]
   pageInfo: PageInfo
 }
 
-type FilmInformationPublicEdge {
+type FilmEntityEdge {
   cursor: String!
-  node: FilmInformationPublic!
+  node: FilmEntity!
 }
 
 type PaginatedFilmGallery {
@@ -151,15 +169,29 @@ enum Role {
 }
 
 type Mutation {
+  updateInformation(input: UpdateInformationDto!): ReturnMessageBase!
   createCollection(input: CreateCollectionNFTDto!): ReturnMessageBase!
   createCompressedNFTMetadata(input: CreateCompressedNFTMetadata!): ReturnMessageBase!
-  updateInformation(input: UpdateInformationDto!): ReturnMessageBase!
   mintCompressedNFT(cNFTId: ID!): ReturnMessageBase!
+  subscribeToWhitelist(filmId: ID!): ReturnMessageBase!
   createFilm(input: CreateFilmDto!): ReturnMessageBase!
+
+  """
+  This api used for update information about the film. For the top cast do not pass the value to the api. Can be used this to update the end date of subscribe for user to be a whitelist of film
+  """
+  updateFilm(input: UpdateFilmDto!): ReturnMessageBase!
   upsertGalleryFilm(input: UpsertGalleryFilmDto!): ReturnMessageBase!
   signUp(input: CreateAccountDto!): ReturnAccountDto!
   signIn(input: SignInDto!): ReturnAccountDto!
   signInWithSocial(input: SignInWithSocialDto!): ReturnAccountDto!
+}
+
+input UpdateInformationDto {
+  publicKey: String
+  avatar: String
+  background: String
+  name: String
+  bio: String
 }
 
 input CreateCollectionNFTDto {
@@ -180,14 +212,6 @@ input CreateCompressedNFTMetadata {
   uri: String!
 }
 
-input UpdateInformationDto {
-  publicKey: String
-  avatar: String
-  background: String
-  name: String
-  bio: String
-}
-
 input CreateFilmDto {
   name: String!
   description: String!
@@ -203,6 +227,19 @@ input CreateFilmDto {
 input FilmTopCastInput {
   name: String!
   avatar: String!
+}
+
+input UpdateFilmDto {
+  name: String
+  description: String
+  duration: Int
+  releaseDate: String
+  genres: [FilmGenre!] = []
+  stars: [String!] = []
+  directors: [String!] = []
+  topCasts: [FilmTopCastInput!] = []
+  endDateSubscriber: DateTime
+  id: ID!
 }
 
 input UpsertGalleryFilmDto {

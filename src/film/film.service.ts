@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository, getManager } from 'typeorm'
 import { GetFilmCommand } from './commands/GetFilm.command'
 import { plainToClass } from 'class-transformer'
-import { CreateFilmDto, FilmInformationPublic, PaginatedFilm, PaginatedFilmGallery, UpsertGalleryFilmDto } from './dtos'
+import { CreateFilmDto, PaginatedFilm, PaginatedFilmGallery, UpdateFilmDto, UpsertGalleryFilmDto } from './dtos'
 import { PaginationArgs } from '@/common/interface'
 import { paginate } from '@/common/paginate'
 import { PersonEntity } from '@/db/entities/person'
@@ -23,10 +23,10 @@ export class FilmService {
     private readonly filmGalleryRepository: Repository<FilmGalleryEntity>
   ) {}
 
-  async geById(id: number): Promise<FilmInformationPublic> {
+  async geById(id: number): Promise<FilmEntity> {
     return plainToClass(FilmEntity, await GetFilmCommand.getFilmById(id), {
       excludeExtraneousValues: true
-    }) as FilmInformationPublic
+    }) as FilmEntity
   }
 
   async getFilms(paginationArgs: PaginationArgs): Promise<PaginatedFilm> {
@@ -66,6 +66,18 @@ export class FilmService {
 
     return {
       message: `Create film success`,
+      success: true
+    }
+  }
+
+  async updateFilm(input: UpdateFilmDto, person: PersonEntity): Promise<ReturnMessageBase> {
+    const { id, ...data } = input
+    const film = await GetFilmCommand.getByFilmIdAndPersonId(input.id, person.id)
+
+    await this.filmRepository.update({ id: film.id }, { ...data })
+
+    return {
+      message: `Update film success`,
       success: true
     }
   }

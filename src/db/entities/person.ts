@@ -9,10 +9,10 @@ import {
   OneToMany,
   ManyToOne
 } from 'typeorm'
-
 import * as bcrypt from 'bcrypt'
 import { RoleEntity } from './role'
 import { FilmEntity } from './film'
+import { WhitelistEntity } from './whitelist'
 
 @Entity('person')
 @ObjectType({ isAbstract: true })
@@ -90,6 +90,9 @@ export class PersonEntity {
 
   @OneToMany(() => FilmEntity, film => film.person, { nullable: true })
   films: FilmEntity[]
+
+  @OneToMany(() => WhitelistEntity, (whitelist) => whitelist.person)
+  whitelist: WhitelistEntity[]
 
   comparePassword(password: string) {
     return bcrypt.compareSync(password, this.password)
