@@ -6,6 +6,7 @@ import { PersonEntity } from './person'
 import { FilmGalleryEntity } from './filmGalery'
 import { Expose } from 'class-transformer'
 import { FilmCompressedNFTEntity } from './filmCompressedNFT'
+import { WhitelistEntity } from './whitelist'
 
 @Entity('film')
 @ObjectType({ isAbstract: true })
@@ -70,10 +71,6 @@ export class FilmEntity {
   @Expose()
   endDateSubscriber: Date
 
-  @Field(() => [String], { nullable: true })
-  @Column({ type: 'varchar', array: true, nullable: true })
-  whiteList?: string[] | null
-
   @ManyToOne(() => PersonEntity, person => person.films)
   person: PersonEntity
 
@@ -82,4 +79,7 @@ export class FilmEntity {
 
   @OneToMany(() => FilmCompressedNFTEntity, compressedNFT => compressedNFT.film)
   compressedNFTs: FilmCompressedNFTEntity[]
+
+  @ManyToOne(() => WhitelistEntity, (whitelist) => whitelist.film)
+  whitelist: WhitelistEntity[]
 }

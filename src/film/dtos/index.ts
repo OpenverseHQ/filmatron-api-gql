@@ -1,4 +1,4 @@
-import { ObjectType, OmitType, InputType, Field, Int, GraphQLISODateTime } from '@nestjs/graphql'
+import { ObjectType, OmitType, InputType, Field, Int, GraphQLISODateTime, PartialType, ID } from '@nestjs/graphql'
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 import { Paginated } from '@/common/interface'
 import { FilmEntity } from '@/db/entities/film'
@@ -7,10 +7,7 @@ import { FilmTopCast } from '@/common/types'
 import { FilmGalleryEntity } from '@/db/entities/filmGalery'
 
 @ObjectType({ isAbstract: true })
-export class FilmInformationPublic extends OmitType(FilmEntity, ['whiteList']) {}
-
-@ObjectType({ isAbstract: true })
-export class PaginatedFilm extends Paginated(FilmInformationPublic) {}
+export class PaginatedFilm extends Paginated(FilmEntity) {}
 
 @ObjectType({ isAbstract: true })
 export class PaginatedFilmGallery extends Paginated(FilmGalleryEntity) {}
@@ -52,6 +49,13 @@ export class CreateFilmDto {
   @Field(() => GraphQLISODateTime)
   @IsNotEmpty()
   endDateSubscriber: Date
+}
+
+@InputType({ isAbstract: true })
+export class UpdateFilmDto extends PartialType(CreateFilmDto) {
+  @Field(() => ID)
+  @IsNotEmpty()
+  id: number
 }
 
 @InputType({ isAbstract: true })

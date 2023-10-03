@@ -2,17 +2,24 @@ import { ReturnMessageBase } from '@/common/interface/returnBase'
 import { Message } from '@/common/message'
 import { config } from '@/config'
 import { PersonEntity } from '@/db/entities/person'
+import { WhitelistEntity } from '@/db/entities/whitelist'
 import { GetFilmCollectionNFTCommand } from '@/film-collection-nft/commands/getFilmCollectionNFT.command'
 import { GetFilmCommand } from '@/film/commands/GetFilm.command'
 import { GetFilmCompressedNFTCommand } from '@/nft/commands/getFilmCompressedNFT.command'
 import { NFTService } from '@/nft/nft.service'
 import { convertStringToUnitArray } from '@/utils'
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
 import { Keypair, PublicKey, Connection } from '@solana/web3.js'
+import { Repository } from 'typeorm'
 
 @Injectable()
 export class UserService {
-  constructor(private readonly nftService: NFTService) {}
+  constructor(
+    private readonly nftService: NFTService,
+    @InjectRepository(WhitelistEntity)
+    private readonly whiteListRepository: Repository<WhitelistEntity>
+    ) {}
 
   async mintCompressedNFT(cNFTId: number, person: PersonEntity): Promise<ReturnMessageBase> {
     if (!person.publicKey) {
@@ -47,6 +54,20 @@ export class UserService {
     return {
       success: true,
       message: 'mint cNFT successfully'
+    }
+  }
+
+  async subscribeToWhitelist(filmId: number, person: PersonEntity): Promise<ReturnMessageBase>{
+    const film = await GetFilmCommand.getFilmById(filmId)
+    if (new Date() > film.endDateSubscriber) {
+      throw new BadRequestException(Message.User.CAN_NOT_SUBSCRIBE_TO_WHITELIST)
+    }
+
+    await this.whiteListRepository.save({ filmId: film.id, personId: person.id })
+
+    return {
+      success: true,
+      message: 'Subscribe to be whitelist of film successfully'
     }
   }
 }
