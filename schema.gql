@@ -13,6 +13,8 @@ type Query {
   getCompressedNFT(id: ID!): FilmCompressedNFTEntity!
   getFilmById(id: ID!): FilmInformationPublic!
   getFilms(first: Int, after: String, last: Int, before: String): PaginatedFilm!
+  getGalleriesOfFilm(filmId: ID!, first: Int, after: String, last: Int, before: String): PaginatedFilmGallery!
+  getGalleryById(id: ID!): FilmGalleryEntity!
   logOut: ReturnMessageBase!
   refreshToken: ReturnTokenDto!
   helloFilmMaker: String!
@@ -103,6 +105,23 @@ type FilmInformationPublicEdge {
   node: FilmInformationPublic!
 }
 
+type PaginatedFilmGallery {
+  edges: [FilmGalleryEntityEdge!]
+  pageInfo: PageInfo
+}
+
+type FilmGalleryEntityEdge {
+  cursor: String!
+  node: FilmGalleryEntity!
+}
+
+type FilmGalleryEntity {
+  id: ID!
+  name: String
+  url: String!
+  filmId: Float!
+}
+
 type ReturnTokenDto {
   accessToken: String!
   refreshToken: String!
@@ -137,6 +156,7 @@ type Mutation {
   updateInformation(input: UpdateInformationDto!): ReturnMessageBase!
   mintCompressedNFT(cNFTId: ID!): ReturnMessageBase!
   createFilm(input: CreateFilmDto!): ReturnMessageBase!
+  upsertGalleryFilm(input: UpsertGalleryFilmDto!): ReturnMessageBase!
   signUp(input: CreateAccountDto!): ReturnAccountDto!
   signIn(input: SignInDto!): ReturnAccountDto!
   signInWithSocial(input: SignInWithSocialDto!): ReturnAccountDto!
@@ -183,6 +203,13 @@ input CreateFilmDto {
 input FilmTopCastInput {
   name: String!
   avatar: String!
+}
+
+input UpsertGalleryFilmDto {
+  id: Float
+  name: String!
+  url: String!
+  filmId: Float!
 }
 
 type ReturnAccountDto {

@@ -19,6 +19,7 @@ export const MessageName = {
   user: 'User',
   filmMaker: 'FilmMaker',
   film: 'Film',
+  gallery: 'Gallery',
   cNFT: 'CNFT',
   collectionNFT: 'CollectionNFT'
 }
