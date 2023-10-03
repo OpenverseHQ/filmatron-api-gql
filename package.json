@@ -11,7 +11,7 @@
   "scripts": {
     "preinstall": "npx only-allow yarn",
     "deploy:prod": "yarn run build && yarn run check-start && yarn run start-process",
-    "check-start": "pm2 list | grep -q 'filmatron-server' && pm2 delete filmatron-server",
+    "check-start": "pm2 list | grep -q 'filmatron-server' && pm2 delete filmatron-server || true",
     "start-process": "yarn run build && pm2 start dist/main.js --name filmatron-server",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
