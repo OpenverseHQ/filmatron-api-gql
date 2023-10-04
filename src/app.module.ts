@@ -19,10 +19,23 @@ import { UserModule } from './user/user.module'
 import { JwtModule } from '@nestjs/jwt'
 import { FilmCollectionNFTModule } from './film-collection-nft/film-collection-nft.module'
 import { WhitelistModule } from './whitelist/whitelist.module'
+import { ALLOWED_DOMAINS } from './utils'
 
 @Module({
   imports: [
-    GraphQLModule.forRoot<ApolloDriverConfig>({
+    GraphQLModule.forRoot<ApolloDriverConfig & {
+      cors: {
+        origin: string[]
+        credentials: boolean
+        methods: string
+      }
+    }>({
+      cors: {
+        origin: ALLOWED_DOMAINS,
+        credentials: true,
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+
+      },
       driver: ApolloDriver,
       playground: true,
       autoSchemaFile: join(process.cwd(), `/schema.gql`),

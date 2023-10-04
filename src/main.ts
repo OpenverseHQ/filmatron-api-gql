@@ -3,7 +3,7 @@ import { ClassSerializerInterceptor, Logger, ValidationPipe } from '@nestjs/comm
 import { AppModule } from './app.module'
 import { APILogger } from './config/logger'
 import { checkAllValueENVHadPass, config } from './config'
-import { isDevelopment } from './utils'
+import { ALLOWED_DOMAINS, isDevelopment } from './utils'
 
 async function bootstrap() {
   try {
@@ -17,7 +17,7 @@ async function bootstrap() {
       logger: new APILogger()
     })
     app.enableCors({
-      origin: ['*', "http://localhost:3000", "https://filmatron-admin.vercel.app", "https://filmatron-client.vercel.app"], // Replace with your frontend URL
+      origin: ALLOWED_DOMAINS, // Replace with your frontend URL
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
       credentials: true, // Enable credentials if your frontend sends cookies or credentials
     });
