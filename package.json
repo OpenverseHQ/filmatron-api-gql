@@ -49,8 +49,6 @@
     "@solana/web3.js": "^1.78.5",
     "@types/lodash": "^4.14.198",
     "@types/passport-jwt": "^3.0.9",
-    "@web3auth/base": "^7.0.1",
-    "@web3auth/node-sdk": "^1.1.0",
     "bcrypt": "^5.1.1",
     "bs58": "^5.0.0",
     "class-transformer": "^0.5.1",

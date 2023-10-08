@@ -26,22 +26,12 @@ export class FilmTopCast {
 }
 
 export interface TokenPayload {
+  domain: string
+  pubkey: string
+  code: string
   iat: number
-  aud: string
-  nonce: string
-  iss: string
-  wallets: {
-    public_key: string
-    type: string
-    curve: string
-  }[]
-  email?: string
-  name?: string
-  profileImage?: string
-  verifier: string
-  verifierId: string
-  aggregateVerifier: string
-  exp: number
+  ttl: number
+  permissions: string[]
 }
 
 export class CollectionData {
