@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Field, GraphQLISODateTime, ID, Int, ObjectType } from '@nestjs/graphql'
-import { FILM_GENRE, ADMIN_PROCESS_STATUS, FILM_STATUS } from 'src/common/constant'
+import { ADMIN_PROCESS_STATUS, FILM_STATUS } from 'src/common/constant'
 import { FilmTopCast } from 'src/common/types'
 import { PersonEntity } from './person'
 import { FilmGalleryEntity } from './filmGalery'
@@ -36,10 +36,10 @@ export class FilmEntity {
   @Expose()
   releaseDate: string
 
-  @Field(() => [FILM_GENRE])
+  @Field(() => [String])
   @Column({ type: 'varchar', array: true })
   @Expose()
-  genres: FILM_GENRE[]
+  genres: string[]
 
   @Field(() => [String])
   @Column({ type: 'varchar', array: true })

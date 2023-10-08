@@ -1,8 +1,7 @@
-import { ObjectType, OmitType, InputType, Field, Int, GraphQLISODateTime, PartialType, ID } from '@nestjs/graphql'
+import { ObjectType, InputType, Field, Int, GraphQLISODateTime, PartialType, ID } from '@nestjs/graphql'
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 import { Paginated } from '@/common/interface'
 import { FilmEntity } from '@/db/entities/film'
-import { FILM_GENRE } from '@/common/constant'
 import { FilmTopCast } from '@/common/types'
 import { FilmGalleryEntity } from '@/db/entities/filmGalery'
 
@@ -30,9 +29,9 @@ export class CreateFilmDto {
   @IsNotEmpty()
   releaseDate: string
 
-  @Field(() => [FILM_GENRE], { defaultValue: [] })
+  @Field(() => [String], { defaultValue: [] })
   @IsNotEmpty()
-  genres: FILM_GENRE[]
+  genres: string[]
 
   @Field(() => [String], { defaultValue: [] })
   @IsNotEmpty()
