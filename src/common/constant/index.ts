@@ -9,6 +9,11 @@ export enum ROLE {
   FILMMAKER = 'FILMMAKER'
 }
 
+export enum GALLERY_TYPE {
+  IMAGE = 'IMAGE',
+  VIDEO = 'VIDEO'
+}
+
 // WILL BE UPDATE MORE
 export enum FILM_GENRE {
   DRAMA = 'DRAMA',

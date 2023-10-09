@@ -33,9 +33,9 @@ export class CreateFilmDto {
   @IsNotEmpty()
   duration: number
 
-  @Field()
+  @Field(() => GraphQLISODateTime)
   @IsNotEmpty()
-  releaseDate: string
+  releaseDate: Date
 
   @Field(() => [String], { defaultValue: [] })
   @IsNotEmpty()

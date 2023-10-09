@@ -75,9 +75,11 @@ type FilmEntity {
   id: ID!
   name: String!
   description: String!
+  background: String!
+  avatar: String!
   duration: Int!
-  releaseDate: String!
-  genres: [FilmGenre!]!
+  releaseDate: DateTime!
+  genres: [String!]!
   stars: [String!]!
   directors: [String!]!
   adminProcess: AdminProcessStatus!
@@ -86,11 +88,10 @@ type FilmEntity {
   endDateSubscriber: DateTime!
 }
 
-enum FilmGenre {
-  DRAMA
-  ADVENTURE
-  COMEDY
-}
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 enum AdminProcessStatus {
   APPROVED
@@ -107,11 +108,6 @@ type FilmTopCast {
   name: String!
   avatar: String!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type PaginatedFilm {
   edges: [FilmEntityEdge!]
@@ -137,7 +133,13 @@ type FilmGalleryEntity {
   id: ID!
   name: String
   url: String!
+  type: GalleryType!
   filmId: Float!
+}
+
+enum GalleryType {
+  IMAGE
+  VIDEO
 }
 
 type ReturnTokenDto {
@@ -215,9 +217,11 @@ input CreateCompressedNFTMetadata {
 input CreateFilmDto {
   name: String!
   description: String!
+  background: String!
+  avatar: String!
   duration: Int!
-  releaseDate: String!
-  genres: [FilmGenre!]! = []
+  releaseDate: DateTime!
+  genres: [String!]! = []
   stars: [String!]! = []
   directors: [String!]! = []
   topCasts: [FilmTopCastInput!]! = []
@@ -232,9 +236,11 @@ input FilmTopCastInput {
 input UpdateFilmDto {
   name: String
   description: String
+  background: String
+  avatar: String
   duration: Int
-  releaseDate: String
-  genres: [FilmGenre!] = []
+  releaseDate: DateTime
+  genres: [String!] = []
   stars: [String!] = []
   directors: [String!] = []
   topCasts: [FilmTopCastInput!] = []

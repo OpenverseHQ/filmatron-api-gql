@@ -27,12 +27,12 @@ export class FilmEntity {
   description: string
 
   @Field()
-  @Column()
+  @Column({ nullable: true })
   @Expose()
   background: string
 
   @Field()
-  @Column()
+  @Column({ nullable: true })
   @Expose()
   avatar: string
 
@@ -41,10 +41,10 @@ export class FilmEntity {
   @Expose()
   duration: number
 
-  @Field()
-  @Column()
+  @Field(() => GraphQLISODateTime)
+  @Column({ nullable: true })
   @Expose()
-  releaseDate: string
+  releaseDate: Date
 
   @Field(() => [String])
   @Column({ type: 'varchar', array: true })
