@@ -13,13 +13,13 @@ export class KylanGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context)
     const token = this.extractTokenFromHeader(ctx)
-    const { pubkey } = this.jwtService.decode(token) as JWTKylanPayload
+    // const { pubkey } = this.jwtService.decode(token) as JWTKylanPayload
     /**
      * minh-10/1/2023: because the kylan service can not export private key so in here I fake the publickey decode from the token
      * send from kylan service to find the people I want. When go to product, pls command the below line code and un-command the
      * above line code
      */
-    // const pubkey = '89Fh4QKhCEJ5rC1Bf4utchfmqPNejYTfjoW6VxDL8YqB' // FILM MAKER ROLE
+    const pubkey = 'Cyg6eBrhpC3hCPTutCxDGaL7KRoaPf8EiJGrDivDYXr8' // FILM MAKER ROLE
     // const pubkey = 'yamRr19VDJAf1ACdyLxLrxJaTRGYdLBNfScKi7whTkQ' // USER ROLE
     const person = await this.personService.findByPublicKey(pubkey, ['rolePerson'])
     ctx.getContext().req.user = person

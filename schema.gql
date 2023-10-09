@@ -77,19 +77,13 @@ type FilmEntity {
   description: String!
   duration: Int!
   releaseDate: String!
-  genres: [FilmGenre!]!
+  genres: [String!]!
   stars: [String!]!
   directors: [String!]!
   adminProcess: AdminProcessStatus!
   status: FilmStatus!
   topCasts: [FilmTopCast!]
   endDateSubscriber: DateTime!
-}
-
-enum FilmGenre {
-  DRAMA
-  ADVENTURE
-  COMEDY
 }
 
 enum AdminProcessStatus {
@@ -217,7 +211,7 @@ input CreateFilmDto {
   description: String!
   duration: Int!
   releaseDate: String!
-  genres: [FilmGenre!]! = []
+  genres: [String!]! = []
   stars: [String!]! = []
   directors: [String!]! = []
   topCasts: [FilmTopCastInput!]! = []
@@ -234,7 +228,7 @@ input UpdateFilmDto {
   description: String
   duration: Int
   releaseDate: String
-  genres: [FilmGenre!] = []
+  genres: [String!] = []
   stars: [String!] = []
   directors: [String!] = []
   topCasts: [FilmTopCastInput!] = []
