@@ -91,7 +91,7 @@ export class PersonEntity {
   @OneToMany(() => FilmEntity, film => film.person, { nullable: true })
   films: FilmEntity[]
 
-  @OneToMany(() => WhitelistEntity, (whitelist) => whitelist.person)
+  @OneToMany(() => WhitelistEntity, whitelist => whitelist.person)
   whitelist: WhitelistEntity[]
 
   comparePassword(password: string) {

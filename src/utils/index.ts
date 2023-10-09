@@ -80,4 +80,9 @@ export const compactObject = <T extends Record<string, any>>(object: T | undefin
     return acc
   }, {}) as T
 }
-export const ALLOWED_DOMAINS = ["*","localhost:3001", "https://filmatron-admin.vercel.app", "https://filmatron-client.vercel.app"]
+export const ALLOWED_DOMAINS = [
+  '*',
+  'localhost:3001',
+  'https://filmatron-admin.vercel.app',
+  'https://filmatron-client.vercel.app'
+]

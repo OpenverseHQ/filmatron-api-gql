@@ -90,6 +90,6 @@ export class FilmEntity {
   @OneToMany(() => FilmCompressedNFTEntity, compressedNFT => compressedNFT.film)
   compressedNFTs: FilmCompressedNFTEntity[]
 
-  @ManyToOne(() => WhitelistEntity, (whitelist) => whitelist.film)
+  @ManyToOne(() => WhitelistEntity, whitelist => whitelist.film)
   whitelist: WhitelistEntity[]
 }

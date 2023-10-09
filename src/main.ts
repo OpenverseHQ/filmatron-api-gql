@@ -19,8 +19,8 @@ async function bootstrap() {
     app.enableCors({
       origin: ALLOWED_DOMAINS, // Replace with your frontend URL
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-      credentials: true, // Enable credentials if your frontend sends cookies or credentials
-    });
+      credentials: true // Enable credentials if your frontend sends cookies or credentials
+    })
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }))
     app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
 

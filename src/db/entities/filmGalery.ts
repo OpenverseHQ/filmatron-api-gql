@@ -8,8 +8,8 @@ import { GALLERY_TYPE } from '@/common/constant'
 export class FilmGalleryEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
-  id: number 
-  
+  id: number
+
   @Field({ nullable: true })
   @Column()
   name: string

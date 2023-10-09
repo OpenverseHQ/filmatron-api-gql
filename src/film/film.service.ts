@@ -35,10 +35,14 @@ export class FilmService {
     return paginate({ query, paginationArgs, isUsedPlainClass: true, classRef: FilmEntity, defaultLimit: 7 })
   }
 
-  async getGalleriesOfFilm(params: {filmId: number, paginationArgs: PaginationArgs, person: PersonEntity}): Promise<PaginatedFilmGallery> {
+  async getGalleriesOfFilm(params: {
+    filmId: number
+    paginationArgs: PaginationArgs
+    person: PersonEntity
+  }): Promise<PaginatedFilmGallery> {
     const { filmId, paginationArgs, person } = params
-    // validate the current user have the permission to see via nft or not 
-    
+    // validate the current user have the permission to see via nft or not
+
     await GetFilmCommand.getFilmById(filmId)
 
     const query = this.filmGalleryRepository
@@ -50,7 +54,7 @@ export class FilmService {
   }
 
   async getGalleryById(id: number, person: PersonEntity): Promise<FilmGalleryEntity> {
-    // validate the current user have the permission to see via nft or not 
+    // validate the current user have the permission to see via nft or not
 
     return await GetFilmGalleryCommand.getById(id)
   }
