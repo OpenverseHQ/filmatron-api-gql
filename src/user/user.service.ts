@@ -19,7 +19,7 @@ export class UserService {
     private readonly nftService: NFTService,
     @InjectRepository(WhitelistEntity)
     private readonly whiteListRepository: Repository<WhitelistEntity>
-    ) {}
+  ) {}
 
   async mintCompressedNFT(cNFTId: number, person: PersonEntity): Promise<ReturnMessageBase> {
     if (!person.publicKey) {
@@ -57,7 +57,7 @@ export class UserService {
     }
   }
 
-  async subscribeToWhitelist(filmId: number, person: PersonEntity): Promise<ReturnMessageBase>{
+  async subscribeToWhitelist(filmId: number, person: PersonEntity): Promise<ReturnMessageBase> {
     const film = await GetFilmCommand.getFilmById(filmId)
     if (new Date() > film.endDateSubscriber) {
       throw new BadRequestException(Message.User.CAN_NOT_SUBSCRIBE_TO_WHITELIST)

@@ -12,13 +12,19 @@ export class UserResolver {
 
   @AuthKylan([ROLE.USER])
   @Mutation(() => ReturnMessageBase)
-  async mintCompressedNFT(@Args('cNFTId', { type: () => ID }) cNFTId: number, @Person() person: PersonEntity): Promise<ReturnMessageBase> {
+  async mintCompressedNFT(
+    @Args('cNFTId', { type: () => ID }) cNFTId: number,
+    @Person() person: PersonEntity
+  ): Promise<ReturnMessageBase> {
     return await this.userService.mintCompressedNFT(cNFTId, person)
   }
 
   @AuthKylan([ROLE.USER])
   @Mutation(() => ReturnMessageBase)
-  async subscribeToWhitelist(@Args('filmId', { type: () => ID }) filmId: number, @Person() person: PersonEntity): Promise<ReturnMessageBase> {
+  async subscribeToWhitelist(
+    @Args('filmId', { type: () => ID }) filmId: number,
+    @Person() person: PersonEntity
+  ): Promise<ReturnMessageBase> {
     return await this.userService.subscribeToWhitelist(filmId, person)
   }
 }

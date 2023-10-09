@@ -26,15 +26,25 @@ export class FilmEntity {
   @Expose()
   description: string
 
+  @Field()
+  @Column({ nullable: true })
+  @Expose()
+  background: string
+
+  @Field()
+  @Column({ nullable: true })
+  @Expose()
+  avatar: string
+
   @Field(() => Int)
   @Column()
   @Expose()
   duration: number
 
-  @Field()
-  @Column()
+  @Field(() => GraphQLISODateTime)
+  @Column({ nullable: true })
   @Expose()
-  releaseDate: string
+  releaseDate: Date
 
   @Field(() => [String])
   @Column({ type: 'varchar', array: true })
@@ -80,6 +90,6 @@ export class FilmEntity {
   @OneToMany(() => FilmCompressedNFTEntity, compressedNFT => compressedNFT.film)
   compressedNFTs: FilmCompressedNFTEntity[]
 
-  @ManyToOne(() => WhitelistEntity, (whitelist) => whitelist.film)
+  @ManyToOne(() => WhitelistEntity, whitelist => whitelist.film)
   whitelist: WhitelistEntity[]
 }

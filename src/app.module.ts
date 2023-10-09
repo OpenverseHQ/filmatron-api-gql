@@ -23,18 +23,19 @@ import { ALLOWED_DOMAINS } from './utils'
 
 @Module({
   imports: [
-    GraphQLModule.forRoot<ApolloDriverConfig & {
-      cors: {
-        origin: string[]
-        credentials: boolean
-        methods: string
+    GraphQLModule.forRoot<
+      ApolloDriverConfig & {
+        cors: {
+          origin: string[]
+          credentials: boolean
+          methods: string
+        }
       }
-    }>({
+    >({
       cors: {
         origin: ALLOWED_DOMAINS,
         credentials: true,
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
       },
       driver: ApolloDriver,
       playground: true,
@@ -54,7 +55,16 @@ import { ALLOWED_DOMAINS } from './utils'
 
         return errorFormatted
       },
-      include: [FilmMakerModule, AuthModule, FilmModule, UserModule, NFTModule, FilmCollectionNFTModule, PersonModule, WhitelistModule]
+      include: [
+        FilmMakerModule,
+        AuthModule,
+        FilmModule,
+        UserModule,
+        NFTModule,
+        FilmCollectionNFTModule,
+        PersonModule,
+        WhitelistModule
+      ]
     }),
     ConfigModule.forRoot({
       isGlobal: true,
