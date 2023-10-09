@@ -21,6 +21,14 @@ export class CreateFilmDto {
   @IsNotEmpty()
   description: string
 
+  @Field()
+  @IsNotEmpty()
+  background: string
+
+  @Field()
+  @IsNotEmpty()
+  avatar: string
+
   @Field(() => Int)
   @IsNotEmpty()
   duration: number

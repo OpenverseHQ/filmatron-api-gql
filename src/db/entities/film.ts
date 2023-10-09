@@ -26,6 +26,16 @@ export class FilmEntity {
   @Expose()
   description: string
 
+  @Field()
+  @Column()
+  @Expose()
+  background: string
+
+  @Field()
+  @Column()
+  @Expose()
+  avatar: string
+
   @Field(() => Int)
   @Column()
   @Expose()
