@@ -17,7 +17,8 @@ async function bootstrap() {
       logger: new APILogger()
     })
     app.enableCors({
-      origin: ALLOWED_DOMAINS, // Replace with your frontend URL
+      origin: /.+/ ,
+      // origin: ALLOWED_DOMAINS, // Replace with your frontend URL
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
       credentials: true // Enable credentials if your frontend sends cookies or credentials
     })
