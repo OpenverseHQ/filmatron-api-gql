@@ -103,9 +103,10 @@ export class AuthService {
             })
             .then(async data => {
               const rolePerson = await this.roleRepository.findOne({ where: { role } })
+              const { address } = await this.getSolanaAddress(authorization)
 
               await this.personRepository.save({
-                publicKey: decodedToken.pubkey,
+                publicKey: address,
                 email: data.email,
                 avatar: data.image,
                 name: data.name,
