@@ -1,7 +1,7 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import { AuthService } from './auth.service'
-import { CreateAccountDto, SignInWithSocialDto, ReturnAccountDto, ReturnTokenDto, SignInDto } from './dtos/auth.dto'
+import { CreateAccountDto, SignInWithSocialDto, ReturnAccountDto, ReturnTokenDto, SignInDto, ReturnSolanaAddressDto } from './dtos/auth.dto'
 import { ReturnMessageBase } from 'src/common/interface/returnBase'
 import { Auth } from 'src/common/decorators/auth.decorator'
 import { Person } from 'src/common/decorators/person.decorator'
@@ -46,5 +46,11 @@ export class AuthResolver {
   @Query(() => ReturnTokenDto, { name: 'refreshToken' })
   async refreshToken(@Person() person: PersonEntity) {
     return await this.authService.refreshToken(person.id, person.refreshToken)
+  }
+
+  @Query(() => ReturnSolanaAddressDto, { name: 'getSolanaAddress' })
+  async getSolanaAddress(@Context() context: MyContext) {
+    const authorization = context.req.headers.authorization;
+    return await this.authService.getSolanaAddress(authorization)
   }
 }
