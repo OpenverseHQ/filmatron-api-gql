@@ -57,7 +57,7 @@ export class CreateTreeCommand {
     const createTreeIx = createCreateTreeInstruction(
       {
         payer: payer.publicKey,
-        treeCreator: filmMakerPubKey,
+        treeCreator: payer.publicKey,
         treeAuthority,
         merkleTree: treeKeypair.publicKey,
         compressionProgram: SPL_ACCOUNT_COMPRESSION_PROGRAM_ID,
