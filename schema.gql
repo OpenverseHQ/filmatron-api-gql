@@ -18,6 +18,7 @@ type Query {
   getGalleryById(id: ID!): FilmGalleryEntity!
   logOut: ReturnMessageBase!
   refreshToken: ReturnTokenDto!
+  getSolanaAddress: ReturnSolanaAddressDto!
   helloFilmMaker: String!
   getFilmMakerById(id: ID!): PersonEntity!
 }
@@ -145,6 +146,10 @@ enum GalleryType {
 type ReturnTokenDto {
   accessToken: String!
   refreshToken: String!
+}
+
+type ReturnSolanaAddressDto {
+  address: String!
 }
 
 type PersonEntity {

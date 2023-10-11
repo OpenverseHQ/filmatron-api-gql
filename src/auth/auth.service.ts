@@ -3,7 +3,7 @@ import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
-import { CreateAccountDto, ReturnAccountDto, ReturnTokenDto, SignInDto, SignInWithSocialDto } from './dtos/auth.dto'
+import { CreateAccountDto, ReturnAccountDto, ReturnSolanaAddressDto, ReturnTokenDto, SignInDto, SignInWithSocialDto } from './dtos/auth.dto'
 import { PersonEntity } from 'src/db/entities/person'
 import { Message, MessageName } from 'src/common/message'
 import { config } from 'src/config'
@@ -188,6 +188,42 @@ export class AuthService {
     return {
       accessToken,
       refreshToken
+    }
+  }
+
+  async getSolanaAddress(authorization: string): Promise<ReturnSolanaAddressDto> {
+    let solanaAdress = '';
+    if (authorization) {
+      const url = 'https://filmatron-jwks.kylan.so/api/user/address/solana'
+
+      await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: authorization
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok')
+          }
+          return response.json()
+        })
+        .then(data => {
+          solanaAdress = data.address;
+        })
+        .catch(() => {
+          throw new UnauthorizedException(Message.Base.NotFound('Token invalid'))
+        })
+    }
+    
+    if (solanaAdress) {
+      return {
+        address: solanaAdress
+      }
+    } else {
+      return {
+        address: ''
+      }
     }
   }
 

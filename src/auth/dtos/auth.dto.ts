@@ -57,3 +57,9 @@ export class ReturnAccountDto extends ReturnTokenDto {
   @Field()
   person: PersonEntity
 }
+
+@ObjectType({ isAbstract: true })
+export class ReturnSolanaAddressDto {
+  @Field()
+  address: string
+}
