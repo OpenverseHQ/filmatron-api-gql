@@ -22,6 +22,7 @@ export class UserService {
   ) {}
 
   async mintCompressedNFT(cNFTId: number, person: PersonEntity): Promise<ReturnMessageBase> {
+    console.log(person);
     if (!person.publicKey) {
       throw new BadRequestException(Message.User.NOT_FOUND_PUBLICKEY)
     }
