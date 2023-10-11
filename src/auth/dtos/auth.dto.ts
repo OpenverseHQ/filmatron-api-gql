@@ -29,6 +29,10 @@ export class SignInWithSocialDto {
   @Field()
   @IsNotEmpty()
   publicKey: string
+
+  @Field(() => ROLE)
+  @IsEnum(ROLE)
+  role: ROLE
 }
 
 @InputType({ isAbstract: true })

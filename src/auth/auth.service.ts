@@ -74,7 +74,7 @@ export class AuthService {
     }
   }
 
-  async signInWithSocial({ publicKey }: SignInWithSocialDto, authorization: string): Promise<ReturnAccountDto> {
+  async signInWithSocial({ publicKey, role }: SignInWithSocialDto, authorization: string): Promise<ReturnAccountDto> {
     const idToken = authorization.replace('Bearer ', '')
 
     try {
@@ -107,7 +107,7 @@ export class AuthService {
                 email: data.email,
                 avatar: data.image,
                 name: data.name,
-                role: 'USER'
+                role
               })
             })
             .catch(() => {
