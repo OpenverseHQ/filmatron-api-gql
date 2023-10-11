@@ -280,4 +280,5 @@ input SignInDto {
 
 input SignInWithSocialDto {
   publicKey: String!
+  role: Role!
 }
