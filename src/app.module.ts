@@ -26,14 +26,14 @@ import { ALLOWED_DOMAINS } from './utils'
     GraphQLModule.forRoot<
       ApolloDriverConfig & {
         cors: {
-          origin: string[]
+          origin: string
           credentials: boolean
           methods: string
         }
       }
     >({
       cors: {
-        origin: ALLOWED_DOMAINS,
+        origin: /.+/ ,
         credentials: true,
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
       },
