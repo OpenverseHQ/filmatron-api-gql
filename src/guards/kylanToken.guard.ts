@@ -18,6 +18,7 @@ export class KylanGuard implements CanActivate {
     const authorization = ctx.getContext().req.headers.authorization
     const { pubkey } = this.jwtService.decode(token) as JWTKylanPayload
     const { address } = await GetSolanaAddressCommand.getSolanaAddress(authorization)
+    console.log("_-->?"+address);
     /**
      * minh-10/1/2023: because the kylan service can not export private key so in here I fake the publickey decode from the token
      * send from kylan service to find the people I want. When go to product, pls command the below line code and un-command the
@@ -26,6 +27,8 @@ export class KylanGuard implements CanActivate {
     // const pubkey = 'Cyg6eBrhpC3hCPTutCxDGaL7KRoaPf8EiJGrDivDYXr8' // FILM MAKER ROLE
     // const pubkey = 'yamRr19VDJAf1ACdyLxLrxJaTRGYdLBNfScKi7whTkQ' // USER ROLE
     const person = await this.personService.findByPublicKey(address, ['rolePerson'])
+    console.log("_-->>",person);
+
     ctx.getContext().req.user = person
     return true
   }
