@@ -25,14 +25,10 @@ export class GetFilmCommand {
 
   static async getFilmById(id: number, relations?: string[]): Promise<FilmEntity> {
     const film = await getRepository(FilmEntity).findOne({ where: { id }, relations })
-    const filmNFTs = await GetFilmCompressedNFTCommand.getById(id);
     if (!film) {
       throw new NotFoundException(Message.Base.NotFound(MessageName.film))
     }
 
-    return {
-      ...film,
-      ...filmNFTs
-    }
+    return film;
   }
 }
