@@ -21,6 +21,7 @@ import { FilmCollectionNFTModule } from './film-collection-nft/film-collection-n
 import { WhitelistModule } from './whitelist/whitelist.module'
 import { CloudinaryModule } from './cloudinary/cloudinary.module'
 import { CloudinaryService } from './cloudinary/cloudinary.service'
+import { RestController } from './app.controller'
 
 @Module({
   imports: [
@@ -92,6 +93,7 @@ import { CloudinaryService } from './cloudinary/cloudinary.service'
       useClass: ClassSerializerInterceptor
     },
     CloudinaryService
-  ]
+  ],
+  controllers: [RestController],
 })
 export class AppModule {}
