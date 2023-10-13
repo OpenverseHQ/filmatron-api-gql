@@ -176,7 +176,7 @@ enum Role {
 }
 
 type Mutation {
-  uploadImageToCloudinary: ReturnMessageBase!
+  uploadImageToCloudinary(input: FileUploadInput!): ReturnMessageBase!
   updateInformation(input: UpdateInformationDto!): ReturnMessageBase!
   createCollection(input: CreateCollectionNFTDto!): ReturnMessageBase!
   createCompressedNFTMetadata(input: CreateCompressedNFTMetadata!): ReturnMessageBase!
@@ -193,6 +193,13 @@ type Mutation {
   signIn(input: SignInDto!): ReturnAccountDto!
   signInWithSocial(input: SignInWithSocialDto!): ReturnAccountDto!
 }
+
+input FileUploadInput {
+  file: Upload!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input UpdateInformationDto {
   publicKey: String

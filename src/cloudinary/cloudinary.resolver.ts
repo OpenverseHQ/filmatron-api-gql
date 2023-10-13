@@ -1,14 +1,23 @@
-import { BadRequestException } from '@nestjs/common';
-import { Mutation, Resolver } from '@nestjs/graphql';
+import { BadRequestException, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Args, Field, InputType, Mutation, Resolver } from '@nestjs/graphql';
 import { CloudinaryService } from './cloudinary.service';
 import { ReturnMessageBase } from '@/common/interface/returnBase';
 
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
+@InputType()
+class FileUploadInput {
+  @Field(() => GraphQLUpload)
+  file: FileUpload;
+}
 @Resolver()
 export class CloudinaryResolver {
+
   constructor(private cloudinary: CloudinaryService) {}
-  @Mutation(() => ReturnMessageBase, {})
-  async uploadImageToCloudinary(file: Express.Multer.File) {
-    return await this.cloudinary.uploadImage(file).catch(() => {
+  @Mutation(() => ReturnMessageBase)
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadImageToCloudinary(@Args('input') input: FileUploadInput) {
+    return await this.cloudinary.uploadImage(input.file).catch(() => {
       throw new BadRequestException('Invalid file type.');
     });
   }
