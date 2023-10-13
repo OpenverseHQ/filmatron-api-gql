@@ -1,4 +1,6 @@
-import { Controller, Get } from '@nestjs/common'
+import { Controller, Get, Post, UploadedFile, UseInterceptors } from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { CloudinaryService } from './cloudinary/cloudinary.service';
 
 interface JWKSData {
   kty: string
@@ -11,6 +13,7 @@ interface JWKSData {
 
 @Controller('api/rest')
 export class RestController {
+  constructor(private readonly appService: CloudinaryService) {}
   @Get('/jwks')
   getJWKS(): JWKSData {
     const jwksData: JWKSData = {
@@ -22,5 +25,11 @@ export class RestController {
       use: 'sig'
     }
     return jwksData
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadImage(@UploadedFile() file: Express.Multer.File) {
+    return this.appService.uploadImage(file);
   }
 }
