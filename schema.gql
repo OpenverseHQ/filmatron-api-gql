@@ -176,6 +176,7 @@ enum Role {
 }
 
 type Mutation {
+  uploadImageToCloudinary: ReturnMessageBase!
   updateInformation(input: UpdateInformationDto!): ReturnMessageBase!
   createCollection(input: CreateCollectionNFTDto!): ReturnMessageBase!
   createCompressedNFTMetadata(input: CreateCompressedNFTMetadata!): ReturnMessageBase!

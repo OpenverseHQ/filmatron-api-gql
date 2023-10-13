@@ -4,6 +4,8 @@ import { APP_ENV } from 'src/common/constant'
 dotenv.config()
 
 export const config = {
+
+  CLOUDINARY : 'Cloudinary',
   api: {
     nodeEnv: process.env.APP_ENV || APP_ENV.DEV
   },

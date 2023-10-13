@@ -20,6 +20,8 @@ import { JwtModule } from '@nestjs/jwt'
 import { FilmCollectionNFTModule } from './film-collection-nft/film-collection-nft.module'
 import { WhitelistModule } from './whitelist/whitelist.module'
 import { ALLOWED_DOMAINS } from './utils'
+import { CloudinaryModule } from './cloudinary/cloudinary.module'
+import { CloudinaryService } from './cloudinary/cloudinary.service'
 
 @Module({
   imports: [
@@ -63,7 +65,8 @@ import { ALLOWED_DOMAINS } from './utils'
         NFTModule,
         FilmCollectionNFTModule,
         PersonModule,
-        WhitelistModule
+        WhitelistModule,
+        CloudinaryModule
       ]
     }),
     ConfigModule.forRoot({
@@ -81,13 +84,15 @@ import { ALLOWED_DOMAINS } from './utils'
     FilmCollectionNFTModule,
     WhitelistModule,
     JwtModule.register({ global: true }),
-    TypeOrmModule.forRoot(configData)
+    TypeOrmModule.forRoot(configData),
+    CloudinaryModule
   ],
   providers: [
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor
-    }
+    },
+    CloudinaryService
   ]
 })
 export class AppModule {}
