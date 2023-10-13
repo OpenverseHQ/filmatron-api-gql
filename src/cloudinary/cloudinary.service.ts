@@ -7,7 +7,7 @@ import { FileUpload } from 'graphql-upload-ts';
 
 export class CloudinaryService {
   async uploadImage(
-    file: FileUpload,
+    file: Express.Multer.File,
   ): Promise<UploadApiResponse | UploadApiErrorResponse> {
     
     return new Promise((resolve, reject) => {
@@ -16,7 +16,7 @@ export class CloudinaryService {
         resolve(result);
       });
     
-      toStream(file.createReadStream()).pipe(upload);
+      toStream(file.buffer).pipe(upload);
     });
   }
 }

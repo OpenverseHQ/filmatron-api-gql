@@ -7,8 +7,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 @InputType()
 class FileUploadInput {
-  @Field(() => GraphQLUpload)
-  file: FileUpload;
+  @Field(()=> UseInterceptors(FileInterceptor('file')))
+  file: Express.Multer.File;
 }
 @Resolver()
 export class CloudinaryResolver {

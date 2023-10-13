@@ -19,7 +19,6 @@ import { UserModule } from './user/user.module'
 import { JwtModule } from '@nestjs/jwt'
 import { FilmCollectionNFTModule } from './film-collection-nft/film-collection-nft.module'
 import { WhitelistModule } from './whitelist/whitelist.module'
-import { ALLOWED_DOMAINS } from './utils'
 import { CloudinaryModule } from './cloudinary/cloudinary.module'
 import { CloudinaryService } from './cloudinary/cloudinary.service'
 
