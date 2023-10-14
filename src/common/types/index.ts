@@ -21,7 +21,7 @@ export class FilmTopCast {
   @Field()
   name: string
 
-  @Field()
+  @Field({nullable: true})
   avatar: string
 }
 
