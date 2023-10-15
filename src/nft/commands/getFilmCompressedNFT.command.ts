@@ -16,4 +16,17 @@ export class GetFilmCompressedNFTCommand {
 
     return filmCompressedNFT
   }
+
+  static async getByName(name: string, relations?: string[]): Promise<FilmCompressedNFTEntity> {
+    const filmCompressedNFT = await getRepository(FilmCompressedNFTEntity).findOne({
+      where: { name },
+      relations
+    })
+
+    if (!filmCompressedNFT) {
+      throw new NotFoundException(Message.Base.NotFound(MessageName.cNFT))
+    }
+
+    return filmCompressedNFT
+  }
 }

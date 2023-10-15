@@ -12,6 +12,7 @@ type Query {
   getFilmCollectionNFTById(id: ID!): PublicInformationFilmCollectionNFT!
   getCompressedNFTsOfFilm(filmId: ID!, first: Int, after: String, last: Int, before: String): PaginatedCompressedNFT!
   getCompressedNFT(id: ID!): FilmCompressedNFTEntity!
+  getFilmByCompressedNFT(name: String!): FilmEntity!
   getFilmById(id: ID!): FilmEntity!
   getFilms(first: Int, after: String, last: Int, before: String): PaginatedFilm!
   getGalleriesOfFilm(filmId: ID!, first: Int, after: String, last: Int, before: String): PaginatedFilmGallery!
@@ -107,7 +108,7 @@ enum FilmStatus {
 
 type FilmTopCast {
   name: String!
-  avatar: String!
+  avatar: String
 }
 
 type PaginatedFilm {
@@ -235,7 +236,7 @@ input CreateFilmDto {
 
 input FilmTopCastInput {
   name: String!
-  avatar: String!
+  avatar: String
 }
 
 input UpdateFilmDto {

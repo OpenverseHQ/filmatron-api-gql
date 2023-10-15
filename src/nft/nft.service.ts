@@ -19,6 +19,7 @@ import { CollectionMetadataDto } from '@/film-collection-nft/dtos'
 import { PaginationArgs } from '@/common/interface'
 import { paginate } from '@/common/paginate'
 import { GetFilmCompressedNFTCommand } from './commands/getFilmCompressedNFT.command'
+import { FilmEntity } from '@/db/entities/film'
 
 @Injectable()
 export class NFTService {
@@ -185,5 +186,11 @@ export class NFTService {
 
   async getCompressedNFT(id: number): Promise<FilmCompressedNFTEntity> {
     return await GetFilmCompressedNFTCommand.getById(id)
+  }
+
+  async getFilmOfCompressedNFT(nftName: string): Promise<FilmEntity> {
+    const nft = await GetFilmCompressedNFTCommand.getByName(nftName, ['film'])
+
+    return nft.film
   }
 }

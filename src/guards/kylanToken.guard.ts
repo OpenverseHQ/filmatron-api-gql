@@ -27,7 +27,6 @@ export class KylanGuard implements CanActivate {
     // const pubkey = 'Cyg6eBrhpC3hCPTutCxDGaL7KRoaPf8EiJGrDivDYXr8' // FILM MAKER ROLE
     // const pubkey = 'yamRr19VDJAf1ACdyLxLrxJaTRGYdLBNfScKi7whTkQ' // USER ROLE
     const person = await this.personService.findByPublicKey(address, ['rolePerson'])
-    console.log("_-->>",person);
 
     ctx.getContext().req.user = person
     return true

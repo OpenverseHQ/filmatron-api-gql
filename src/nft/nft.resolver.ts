@@ -8,6 +8,7 @@ import { Person } from '@/common/decorators/person.decorator'
 import { PersonEntity } from '@/db/entities/person'
 import { PaginationArgs } from '@/common/interface'
 import { FilmCompressedNFTEntity } from '@/db/entities/filmCompressedNFT'
+import { FilmEntity } from '@/db/entities/film'
 
 @Resolver()
 export class NFTResolver {
@@ -31,4 +32,10 @@ export class NFTResolver {
   async getCompressedNFT(@Args('id', { type: () => ID }) id: number): Promise<FilmCompressedNFTEntity> {
     return await this.nftService.getCompressedNFT(id)
   }
+
+  @Query(() => FilmEntity, { name: 'getFilmByCompressedNFT' })
+  async getFilmByCompressedNFT(@Args('name', { type: () => String }) name: string): Promise<FilmEntity> {
+    return await this.nftService.getFilmOfCompressedNFT(name)
+  }
+
 }
