@@ -29,6 +29,9 @@ export class UserService {
 
     const filmCompressedNFT = await GetFilmCompressedNFTCommand.getById(cNFTId, ['film'])
     const film = await GetFilmCommand.getFilmById(filmCompressedNFT.film.id, ['person'])
+    if(film.endDateSubscriber < new Date()) {
+      throw new BadRequestException("Film NFT's mint date has ended")
+    }
     const filmCollectionNFT = await GetFilmCollectionNFTCommand.getByFilmId(film.id)
     const adminUnit8ArraySecretKey = convertStringToUnitArray(config.admin.secretKey)
 
