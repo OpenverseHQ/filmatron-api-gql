@@ -20,7 +20,7 @@ export class PersonResolver {
     return await this.personService.updateInformation(input, person)
   }
 
-  @Mutation(() => PersonEntity)
+  @Mutation(() => PersonEntity, { name: 'getMe' })
   @AuthKylan()
   async getUserInfo(@Person() person: PersonEntity): Promise<PersonEntity> {
     return person
