@@ -5,17 +5,18 @@ import { Person } from '@/common/decorators/person.decorator'
 import { PersonEntity } from '@/db/entities/person'
 import { AuthKylan } from '@/common/decorators/auth.decorator'
 import { ROLE } from '@/common/constant'
+import { FilmCompressedNFTEntity } from '@/db/entities/filmCompressedNFT'
 
 @Resolver()
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @AuthKylan([ROLE.USER])
-  @Mutation(() => ReturnMessageBase)
+  @Mutation(() => FilmCompressedNFTEntity)
   async mintCompressedNFT(
     @Args('cNFTId', { type: () => ID }) cNFTId: number,
     @Person() person: PersonEntity
-  ): Promise<ReturnMessageBase> {
+  ): Promise<FilmCompressedNFTEntity> {
     return await this.userService.mintCompressedNFT(cNFTId, person)
   }
 
