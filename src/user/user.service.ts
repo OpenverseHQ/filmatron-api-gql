@@ -1,6 +1,7 @@
 import { ReturnMessageBase } from '@/common/interface/returnBase'
 import { Message } from '@/common/message'
 import { config } from '@/config'
+import { FilmCompressedNFTEntity } from '@/db/entities/filmCompressedNFT'
 import { PersonEntity } from '@/db/entities/person'
 import { WhitelistEntity } from '@/db/entities/whitelist'
 import { GetFilmCollectionNFTCommand } from '@/film-collection-nft/commands/getFilmCollectionNFT.command'
@@ -21,8 +22,7 @@ export class UserService {
     private readonly whiteListRepository: Repository<WhitelistEntity>
   ) {}
 
-  async mintCompressedNFT(cNFTId: number, person: PersonEntity): Promise<ReturnMessageBase> {
-    console.log(person);
+  async mintCompressedNFT(cNFTId: number, person: PersonEntity): Promise<FilmCompressedNFTEntity> {
     if (!person.publicKey) {
       throw new BadRequestException(Message.User.NOT_FOUND_PUBLICKEY)
     }
@@ -55,10 +55,7 @@ export class UserService {
       filmCollectionNFT
     })
 
-    return {
-      success: true,
-      message: 'mint cNFT successfully'
-    }
+    return filmCompressedNFT
   }
 
   async subscribeToWhitelist(filmId: number, person: PersonEntity): Promise<ReturnMessageBase> {
