@@ -63,6 +63,6 @@ export class ReturnAccountDto extends ReturnTokenDto {
 
 @ObjectType({ isAbstract: true })
 export class ReturnSolanaAddressDto {
-  @Field()
+  @Field({nullable: true})
   address: string
 }
