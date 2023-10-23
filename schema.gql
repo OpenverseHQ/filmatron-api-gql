@@ -166,6 +166,7 @@ type PersonEntity {
   youtube: String
   twitter: String
   instagram: String
+  google: String
   refreshToken: String
   role: Role!
 }
@@ -193,6 +194,7 @@ type Mutation {
   signUp(input: CreateAccountDto!): ReturnAccountDto!
   signIn(input: SignInDto!): ReturnAccountDto!
   signInWithSocial(input: SignInWithSocialDto!): ReturnAccountDto!
+  signInWithSocialV2(input: SignInWithKylan!): ReturnAccountDto!
 }
 
 input UpdateInformationDto {
@@ -282,5 +284,10 @@ input SignInDto {
 
 input SignInWithSocialDto {
   publicKey: String
+  role: Role!
+}
+
+input SignInWithKylan {
+  authorization: String!
   role: Role!
 }

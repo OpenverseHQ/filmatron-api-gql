@@ -4,8 +4,7 @@ import { APP_ENV } from 'src/common/constant'
 dotenv.config()
 
 export const config = {
-
-  CLOUDINARY : 'Cloudinary',
+  CLOUDINARY: 'Cloudinary',
   api: {
     nodeEnv: process.env.APP_ENV || APP_ENV.DEV
   },
@@ -31,6 +30,13 @@ export const config = {
     // wallet address that admin will sign transaction when film maker action create a collection for their NFT collection
     publicKey: process.env.ADMIN_PUBLIC_KEY,
     secretKey: process.env.ADMIN_SECRET_KEY
+  },
+  kylan: {
+    // TODO: update name service of Kylan
+    url: process.env.KYLAN_URL || 'https://filmatron-client-a88cb9.kylan.so/api',
+    accessToken: '/access_token',
+    userInfo: '/user',
+    solanaAddress: '/user/address/solana'
   }
 }
 

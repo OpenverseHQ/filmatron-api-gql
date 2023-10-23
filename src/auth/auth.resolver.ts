@@ -1,7 +1,7 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import { AuthService } from './auth.service'
-import { CreateAccountDto, SignInWithSocialDto, ReturnAccountDto, ReturnTokenDto, SignInDto, ReturnSolanaAddressDto } from './dtos/auth.dto'
+import { CreateAccountDto, SignInWithSocialDto, ReturnAccountDto, ReturnTokenDto, SignInDto, ReturnSolanaAddressDto, SignInWithKylan } from './dtos/auth.dto'
 import { ReturnMessageBase } from 'src/common/interface/returnBase'
 import { Auth } from 'src/common/decorators/auth.decorator'
 import { Person } from 'src/common/decorators/person.decorator'
@@ -34,6 +34,11 @@ export class AuthResolver {
   async signInWithSocial(@Args('input') input: SignInWithSocialDto, @Context() context: MyContext) {
     const authorization = context.req.headers.authorization
     return await this.authService.signInWithSocial(input, authorization)
+  }
+
+  @Mutation(() => ReturnAccountDto, { name: 'signInWithSocialV2' })
+  async signInWithKylan(@Args('input') input: SignInWithKylan) {
+    return await this.authService.signInWithKyLan(input)
   }
 
   @Auth()

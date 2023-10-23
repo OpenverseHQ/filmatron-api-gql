@@ -23,23 +23,23 @@ export class PersonEntity {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  publicKey: string | null
+  publicKey?: string | null
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  email: string | null
+  email?: string | null
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  password: string | null
+  password?: string | null
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  avatar: string | null
+  avatar?: string | null
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  background: string | null
+  background?: string | null
 
   @Field()
   @Column()
@@ -54,23 +54,27 @@ export class PersonEntity {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  bio: string | null
+  bio?: string | null
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  discord: string | null
+  discord?: string | null
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  youtube: string | null
+  youtube?: string | null
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  twitter: string | null
+  twitter?: string | null
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  instagram: string | null
+  instagram?: string | null
+
+  @Field({nullable: true})
+  @Column({ nullable: true })
+  google?: string | null
 
   @Field({ nullable: true })
   @Column({ nullable: true })

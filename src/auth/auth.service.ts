@@ -3,13 +3,22 @@ import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
-import { CreateAccountDto, ReturnAccountDto, ReturnSolanaAddressDto, ReturnTokenDto, SignInDto, SignInWithSocialDto } from './dtos/auth.dto'
+import {
+  CreateAccountDto,
+  ReturnAccountDto,
+  ReturnSolanaAddressDto,
+  ReturnTokenDto,
+  SignInDto,
+  SignInWithKylan,
+  SignInWithSocialDto
+} from './dtos/auth.dto'
 import { PersonEntity } from 'src/db/entities/person'
 import { Message, MessageName } from 'src/common/message'
 import { config } from 'src/config'
 import { ReturnMessageBase } from 'src/common/interface/returnBase'
 import { RoleEntity } from '@/db/entities/role'
 import { TokenPayload } from 'src/common/types'
+import axios from 'axios'
 
 @Injectable()
 export class AuthService {
@@ -84,6 +93,7 @@ export class AuthService {
       }
 
       if (decodedToken?.pubkey) {
+        // Get access token from KyLan-Auth3
         const person = await this.personRepository.findOne({ where: { publicKey: decodedToken.pubkey } })
 
         if (!person) {
@@ -112,7 +122,7 @@ export class AuthService {
                 name: data.name,
                 rolePerson
               })
-              console.log("create person succesfull");
+              console.log('create person succesfull')
             })
             .catch(() => {
               throw new UnauthorizedException(Message.Base.NotFound('Authorization invalid'))
@@ -127,6 +137,29 @@ export class AuthService {
       }
     } catch {
       throw new UnauthorizedException(Message.Base.NotFound('Token invalid'))
+    }
+  }
+
+  async signInWithKyLan(dto: SignInWithKylan) {
+    const { authorization, role } = dto
+    const { accessToken, solanaAddress, url, userInfo } = config.kylan
+
+    console.log(authorization)
+    // Get access token from Kylan-Auth3
+    const result = await axios.post(`${url}${accessToken}`, {
+      data: {
+        code: authorization
+      }
+    })
+
+    console.log(result)
+
+    // Get user info and solana address from Kylan-Auth3
+    // Save to person table
+
+    return {
+      accessToken: 'asdsadsadsad',
+      refreshToken: 'asdsadsadsadsadsa'
     }
   }
 
@@ -196,7 +229,7 @@ export class AuthService {
   }
 
   async getSolanaAddress(authorization: string): Promise<ReturnSolanaAddressDto> {
-    let solanaAdress = '';
+    let solanaAdress = ''
     if (authorization) {
       const url = 'https://filmatron-client-a88cb9.kylan.so/api/user/address/solana'
 
@@ -213,13 +246,13 @@ export class AuthService {
           return response.json()
         })
         .then(data => {
-          solanaAdress = data.address;
+          solanaAdress = data.address
         })
         .catch(() => {
           throw new UnauthorizedException(Message.Base.NotFound('Token invalid'))
         })
     }
-    
+
     if (solanaAdress) {
       return {
         address: solanaAdress

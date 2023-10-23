@@ -35,6 +35,17 @@ export class SignInWithSocialDto {
 }
 
 @InputType({ isAbstract: true })
+export class SignInWithKylan {
+  @Field()
+  @IsNotEmpty()
+  authorization: string
+
+  @Field(() => ROLE)
+  @IsEnum(ROLE)
+  role: ROLE
+}
+
+@InputType({ isAbstract: true })
 export class SignInDto {
   @Field()
   @IsNotEmpty()
