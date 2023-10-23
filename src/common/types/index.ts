@@ -30,6 +30,7 @@ export interface TokenPayload {
   pubkey: string
   code: string
   iat: number
+  jti: string
   ttl: number
   permissions: string[]
 }

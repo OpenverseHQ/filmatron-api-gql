@@ -76,18 +76,22 @@ export class AuthService {
 
   async signInWithSocial({ publicKey, role }: SignInWithSocialDto, authorization: string): Promise<ReturnAccountDto> {
     const idToken = authorization.replace('Bearer ', '')
+    console.log("test1",idToken)
 
     try {
       const decodedToken: TokenPayload = this.jwtService.decode(idToken) as TokenPayload
       if (!decodedToken) {
         throw new ForbiddenException(Message.Base.AccessDenied())
       }
-
-      if (decodedToken?.pubkey) {
-        const person = await this.personRepository.findOne({ where: { publicKey: decodedToken.pubkey } })
+    console.log("decode",decodedToken)
+      
+      if (decodedToken?.jti) {
+        const person = await this.personRepository.findOne({ where: { publicKey: decodedToken.jti } })
+        console.log("test2")
 
         if (!person) {
           const url = 'https://filmatron-client-a88cb9.kylan.so/api/user'
+          console.log("test3")
           fetch(url, {
             method: 'GET',
             headers: {
@@ -99,10 +103,12 @@ export class AuthService {
               if (!response.ok) {
                 throw new Error('Network response was not ok')
               }
+              console.log(response.json())
               return response.json()
             })
             .then(async data => {
               const rolePerson = await this.roleRepository.findOne({ where: { role } })
+              console.log({authorization})
               const { address } = await this.getSolanaAddress(authorization)
 
               await this.personRepository.save({
@@ -196,6 +202,7 @@ export class AuthService {
   }
 
   async getSolanaAddress(authorization: string): Promise<ReturnSolanaAddressDto> {
+    console.log(authorization)
     let solanaAdress = '';
     if (authorization) {
       const url = 'https://filmatron-client-a88cb9.kylan.so/api/user/address/solana'
@@ -203,7 +210,7 @@ export class AuthService {
       await fetch(url, {
         method: 'GET',
         headers: {
-          Authorization: authorization
+          Authorization: `Bearer ${authorization}`
         }
       })
         .then(response => {
