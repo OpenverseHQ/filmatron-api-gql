@@ -6,7 +6,7 @@ export class GetSolanaAddressCommand {
   static async getSolanaAddress(authorization: string): Promise<ReturnSolanaAddressDto> {
     let solanaAdress = '';
     if (authorization) {
-      const url = 'https://filmatron-jwks.kylan.so/api/user/address/solana'
+      const url = 'https://filmatron-client-a88cb9.kylan.so/api/user/address/solana'
 
       await fetch(url, {
         method: 'GET',
