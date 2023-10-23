@@ -1,7 +1,7 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import { AuthService } from './auth.service'
-import { CreateAccountDto, SignInWithSocialDto, ReturnAccountDto, ReturnTokenDto, SignInDto, ReturnSolanaAddressDto } from './dtos/auth.dto'
+import { CreateAccountDto, SignInWithSocialDto, ReturnAccountDto, ReturnTokenDto, SignInDto, ReturnSolanaAddressDto, ReturnSignInWalletInput, VerifySignInWithWalletDto } from './dtos/auth.dto'
 import { ReturnMessageBase } from 'src/common/interface/returnBase'
 import { Auth } from 'src/common/decorators/auth.decorator'
 import { Person } from 'src/common/decorators/person.decorator'
@@ -34,6 +34,16 @@ export class AuthResolver {
   async signInWithSocial(@Args('input') input: SignInWithSocialDto, @Context() context: MyContext) {
     const authorization = context.req.headers.authorization
     return await this.authService.signInWithSocial(input, authorization)
+  }
+  
+  @Mutation(() => ReturnSignInWalletInput, { name: 'createSignInDataForWallet' })
+  createSignInDataForWallet(): ReturnSignInWalletInput {
+    return this.authService.createSignInDataForWallet()
+  } 
+
+  @Mutation(() => String, { name: 'signInWithWallet' })
+  signInWithWallet(@Args('input') input: VerifySignInWithWalletDto) {
+    return this.authService.siginInWithWallet(input)
   }
 
   @Auth()

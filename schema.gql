@@ -193,6 +193,8 @@ type Mutation {
   signUp(input: CreateAccountDto!): ReturnAccountDto!
   signIn(input: SignInDto!): ReturnAccountDto!
   signInWithSocial(input: SignInWithSocialDto!): ReturnAccountDto!
+  createSignInDataForWallet: ReturnSignInWalletInput!
+  signInWithWallet(input: VerifySignInWithWalletDto!): String!
 }
 
 input UpdateInformationDto {
@@ -283,4 +285,18 @@ input SignInDto {
 input SignInWithSocialDto {
   publicKey: String
   role: Role!
+}
+
+type ReturnSignInWalletInput {
+  domain: String!
+  statement: String!
+  version: String!
+  chainId: String!
+  nonce: String!
+  issuedAt: String!
+  resources: [String!]!
+}
+
+input VerifySignInWithWalletDto {
+  constructPayload: String!
 }

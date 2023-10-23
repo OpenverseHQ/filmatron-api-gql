@@ -3,13 +3,24 @@ import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
-import { CreateAccountDto, ReturnAccountDto, ReturnSolanaAddressDto, ReturnTokenDto, SignInDto, SignInWithSocialDto } from './dtos/auth.dto'
+import {
+  CreateAccountDto,
+  ReturnAccountDto,
+  ReturnSignInWalletInput,
+  ReturnSolanaAddressDto,
+  ReturnTokenDto,
+  SignInDto,
+  SignInWithSocialDto,
+  VerifySignInWithWalletDto
+} from './dtos/auth.dto'
 import { PersonEntity } from 'src/db/entities/person'
 import { Message, MessageName } from 'src/common/message'
 import { config } from 'src/config'
 import { ReturnMessageBase } from 'src/common/interface/returnBase'
 import { RoleEntity } from '@/db/entities/role'
 import { TokenPayload } from 'src/common/types'
+import { SolanaSignInInput, SolanaSignInOutput } from '@solana/wallet-standard-features'
+import { verifyMessageSignature, verifySignIn } from '@solana/wallet-standard-util'
 
 @Injectable()
 export class AuthService {
@@ -112,7 +123,7 @@ export class AuthService {
                 name: data.name,
                 rolePerson
               })
-              console.log("create person succesfull");
+              console.log('create person succesfull')
             })
             .catch(() => {
               throw new UnauthorizedException(Message.Base.NotFound('Authorization invalid'))
@@ -128,6 +139,44 @@ export class AuthService {
     } catch {
       throw new UnauthorizedException(Message.Base.NotFound('Token invalid'))
     }
+  }
+
+  createSignInDataForWallet(): ReturnSignInWalletInput {
+    const now: Date = new Date()
+    const currentUrl = new URL(config.clientUrl)
+    const domain = currentUrl.host
+
+    const currentDateTime = now.toISOString()
+
+    return {
+      domain,
+      statement: config.wallet.statement,
+      version: '1',
+      nonce: config.wallet.nonce,
+      chainId: 'devnet',
+      issuedAt: currentDateTime,
+      resources: ['https://phantom.app/']
+    }
+  }
+
+  siginInWithWallet({ constructPayload }: VerifySignInWithWalletDto) {
+    const {input, output} = JSON.parse(constructPayload)
+
+    console.log(this.verifySIWS(input, output))
+    return 'success'
+  }
+
+  verifySIWS(input: SolanaSignInInput, output: SolanaSignInOutput) {
+    const serialisedOutput: SolanaSignInOutput = {
+      account: {
+        publicKey: new Uint8Array(output.account.publicKey),
+        ...output.account
+      },
+      signature: new Uint8Array(output.signature),
+      signedMessage: new Uint8Array(output.signedMessage)
+    }
+
+    return verifySignIn(input, serialisedOutput)
   }
 
   async logOut(personId: number): Promise<ReturnMessageBase> {
@@ -196,7 +245,7 @@ export class AuthService {
   }
 
   async getSolanaAddress(authorization: string): Promise<ReturnSolanaAddressDto> {
-    let solanaAdress = '';
+    let solanaAdress = ''
     if (authorization) {
       const url = 'https://filmatron-client-a88cb9.kylan.so/api/user/address/solana'
 
@@ -213,13 +262,13 @@ export class AuthService {
           return response.json()
         })
         .then(data => {
-          solanaAdress = data.address;
+          solanaAdress = data.address
         })
         .catch(() => {
           throw new UnauthorizedException(Message.Base.NotFound('Token invalid'))
         })
     }
-    
+
     if (solanaAdress) {
       return {
         address: solanaAdress

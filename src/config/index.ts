@@ -6,6 +6,7 @@ dotenv.config()
 export const config = {
 
   CLOUDINARY : 'Cloudinary',
+  clientUrl: 'https://filmatron.vercel.app/',
   api: {
     nodeEnv: process.env.APP_ENV || APP_ENV.DEV
   },
@@ -31,6 +32,10 @@ export const config = {
     // wallet address that admin will sign transaction when film maker action create a collection for their NFT collection
     publicKey: process.env.ADMIN_PUBLIC_KEY,
     secretKey: process.env.ADMIN_SECRET_KEY
+  },
+  wallet: {
+    statement: 'Clicking Sign or Approve only means you have proved this wallet is owned by you. This request will not trigger any blockchain transaction or cost any gas fee.',
+    nonce: 'oBbLoEldZs'
   }
 }
 

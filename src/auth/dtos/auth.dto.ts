@@ -1,5 +1,5 @@
 import { ROLE } from '@/common/constant'
-import { Field, InputType, ObjectType } from '@nestjs/graphql'
+import { Field, Float, GraphQLISODateTime, InputType, ObjectType } from '@nestjs/graphql'
 import { IsEmail, IsEnum, IsNotEmpty, MaxLength, MinLength } from 'class-validator'
 import { PersonEntity } from 'src/db/entities/person'
 
@@ -63,6 +63,37 @@ export class ReturnAccountDto extends ReturnTokenDto {
 
 @ObjectType({ isAbstract: true })
 export class ReturnSolanaAddressDto {
-  @Field({nullable: true})
+  @Field({ nullable: true })
   address: string
+}
+
+@ObjectType({ isAbstract: true })
+export class ReturnSignInWalletInput {
+  @Field()
+  domain: string
+
+  @Field()
+  statement: string
+
+  @Field()
+  version: string
+
+  @Field()
+  chainId: string
+
+  @Field()
+  nonce: string
+
+  @Field()
+  issuedAt: string
+
+  @Field(() => [String])
+  resources: string[]
+}
+
+
+@InputType({ isAbstract: true })
+export class VerifySignInWithWalletDto {
+  @Field()
+  constructPayload: string
 }
