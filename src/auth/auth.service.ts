@@ -87,7 +87,7 @@ export class AuthService {
         const person = await this.personRepository.findOne({ where: { publicKey: decodedToken.pubkey } })
 
         if (!person) {
-          const url = 'https://filmatron-jwks.kylan.so/api/user'
+          const url = 'https://filmatron-client-a88cb9.kylan.so/api/user'
           fetch(url, {
             method: 'GET',
             headers: {
