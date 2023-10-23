@@ -26,8 +26,7 @@ export class CreateAccountDto {
 
 @InputType({ isAbstract: true })
 export class SignInWithSocialDto {
-  @Field()
-  @IsNotEmpty()
+  @Field({ nullable: true })
   publicKey: string
 
   @Field(() => ROLE)
