@@ -112,6 +112,7 @@ export class AuthService {
                 name: data.name,
                 rolePerson
               })
+              console.log("create person succesfull");
             })
             .catch(() => {
               throw new UnauthorizedException(Message.Base.NotFound('Authorization invalid'))
@@ -121,7 +122,7 @@ export class AuthService {
         return {
           accessToken: idToken,
           person,
-          refreshToken: ''
+          refreshToken: 'testRefresh'
         }
       }
     } catch {

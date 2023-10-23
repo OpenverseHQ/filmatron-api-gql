@@ -150,7 +150,7 @@ type ReturnTokenDto {
 }
 
 type ReturnSolanaAddressDto {
-  address: String!
+  address: String
 }
 
 type PersonEntity {
@@ -281,6 +281,6 @@ input SignInDto {
 }
 
 input SignInWithSocialDto {
-  publicKey: String!
+  publicKey: String
   role: Role!
 }
