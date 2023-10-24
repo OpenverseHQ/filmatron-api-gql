@@ -76,62 +76,46 @@ export class AuthService {
 
   async signInWithSocial({ publicKey, role }: SignInWithSocialDto, authorization: string): Promise<ReturnAccountDto> {
     const idToken = authorization.replace('Bearer ', '')
-    console.log("test1",idToken)
 
     try {
-      const decodedToken: TokenPayload = this.jwtService.decode(idToken) as TokenPayload
-      if (!decodedToken) {
-        throw new ForbiddenException(Message.Base.AccessDenied())
-      }
-    console.log("decode",decodedToken)
+         const { address } = await this.getSolanaAddress(authorization)
       
-      if (decodedToken?.jti) {
-        const person = await this.personRepository.findOne({ where: { publicKey: decodedToken.jti } })
-        console.log("test2")
-
+        const person = await this.personRepository.findOne({ where: { publicKey: address} })
         if (!person) {
+
           const url = 'https://filmatron-client-a88cb9.kylan.so/api/user'
-          console.log("test3")
-          fetch(url, {
+          const response = await fetch(url, {
             method: 'GET',
             headers: {
               'Access-Control-Allow-Origin': '*',
-              Authorization: authorization
-            }
-          })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Network response was not ok')
-              }
-              console.log(response.json())
-              return response.json()
-            })
-            .then(async data => {
-              const rolePerson = await this.roleRepository.findOne({ where: { role } })
-              console.log({authorization})
-              const { address } = await this.getSolanaAddress(authorization)
+              Authorization: authorization,
+            },
+          });
+    
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          
+          const data = await response.json();
+          const rolePerson = await this.roleRepository.findOne({ where: { role } });
 
-              await this.personRepository.save({
-                publicKey: address,
-                email: data.email,
-                avatar: data.image,
-                name: data.name,
-                rolePerson
-              })
-              console.log("create person succesfull");
-            })
-            .catch(() => {
-              throw new UnauthorizedException(Message.Base.NotFound('Authorization invalid'))
-            })
-        }
-
-        return {
-          accessToken: idToken,
-          person,
-          refreshToken: 'testRefresh'
-        }
+          await this.personRepository.save({
+            publicKey: address,
+            email: data.email,
+            avatar: data.image,
+            name: data.name,
+            rolePerson,
+          });
+    
+         
       }
-    } catch {
+      return {
+        accessToken: idToken,
+        person,
+        refreshToken: 'testRefresh',
+      };
+    } catch (error) {
+      console.log(error);
       throw new UnauthorizedException(Message.Base.NotFound('Token invalid'))
     }
   }
@@ -202,41 +186,35 @@ export class AuthService {
   }
 
   async getSolanaAddress(authorization: string): Promise<ReturnSolanaAddressDto> {
-    console.log(authorization)
-    let solanaAdress = '';
-    if (authorization) {
-      const url = 'https://filmatron-client-a88cb9.kylan.so/api/user/address/solana'
-
-      await fetch(url, {
+    console.log(authorization);
+    
+    if (!authorization) {
+      return { address: '' };
+    }
+  
+    try {
+      const url = 'https://filmatron-client-a88cb9.kylan.so/api/user/address/solana';
+      const response = await fetch(url, {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${authorization}`
-        }
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok')
-          }
-          return response.json()
-        })
-        .then(data => {
-          solanaAdress = data.address;
-        })
-        .catch(() => {
-          throw new UnauthorizedException(Message.Base.NotFound('Token invalid'))
-        })
-    }
-    
-    if (solanaAdress) {
-      return {
-        address: solanaAdress
+          Authorization: authorization,
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-    } else {
+  
+      const data = await response.json();
       return {
-        address: ''
-      }
+        address: data.address,
+      };
+    } catch (error) {
+      console.log(error);
+      throw new UnauthorizedException(Message.Base.NotFound('Token invalid'));
     }
   }
+  
 
   hashData(data: string) {
     return bcrypt.hashSync(data, config.bcrypt.salt)
